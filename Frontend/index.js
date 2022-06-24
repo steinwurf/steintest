@@ -91,9 +91,6 @@ function createWebSocketConnection(selectedServer){
   return Connection 
 }
 
-
-
-
 function DisableComponents(bool){
   startbutton.disabled = bool
   DelaySlider.disabled = bool
