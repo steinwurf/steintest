@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="mystyle.css">
+    <title>jeppe test env</title>
+</head>
+<body>
+    <H1 > Steinwurf Webrtc Measuring Tool</H1>
+
+
+    <H3>Packet Size</H3>
+
+    <div class="slidecontainer">
+        <p>Value : <span id="packetsizespan"></span> bytes </p>
+        <input type="range" min="142" max="2000" value="1071" class="slider" id="PacketSizeSlider">
+    </div>
+
+
+    <H3>Frequency</H3>
+    
+    <div class="slidecontainer">
+        <p>Value : <span id="frequencyspan"></span> packets/second</p>
+        <input type="range" min="1" max="300" value="150" class="slider" id="FrequencySlider">
+    </div>
+    
+    
+    <H3>Duration</H3>
+
+    <div class="slidecontainer">
+        <p>Value : <span id="durationspan"></span> s</p>
+        <input type="range" min="1" max="90" value="45" class="slider" id="DurationSlider">
+    </div>
+
+
+    <H3>Acceptable Delay</H3>
+
+    <div class="slidecontainer">
+        <p>Value : <span id="delayspan"></span> ms</p>
+        <input type="range" min="1" max="1000" value="500" class="slider" id="DelaySlider">
+    </div>
+
+
+    <button id="startbutton" >Start the test</button>
+
+    <select id="serverpick" class="dropdown">
+        <option value="ws://localhost:8081/server1">Server 1</option>
+        <option value="ws://localhost:8082/server2">Server 2</option>
+      </select>
+
+    <div id="plotdiv"> </div>
+
+<script src="index.js"></script>
+<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.js"></script>
+<script src="webrtc.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+</body>
+</html>
