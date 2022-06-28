@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "dataframe-js": "^1.4.4",
-    "plotly.js": "^2.12.1",
-    "plotly.js-dist": "^2.12.1"
-  }
-}
