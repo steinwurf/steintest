@@ -117,7 +117,7 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 func setupRoutes() {
 
 	pool := NewPool()
-	http.HandleFunc("/server2", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		wsEndpoint(pool, w, r)
 	})
 
@@ -126,7 +126,7 @@ func setupRoutes() {
 func Run() {
 	fmt.Println("Starting server")
 	setupRoutes()
-	log.Fatal(http.ListenAndServe(":8082", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 
