@@ -2,6 +2,8 @@ package src
 
 import (
 	"encoding/json"
+	"fmt"
+
 	"github.com/gorilla/websocket"
 	"github.com/pion/webrtc/v3"
 )
@@ -74,6 +76,7 @@ func handleICECandidates(candidate *webrtc.ICECandidate, client Client){
 
 func handleMessageDataChannel(msg webrtc.DataChannelMessage, client Client, channel *webrtc.DataChannel ){
 	channel.Send(msg.Data)
+	fmt.Println(string(msg.Data))
 }
 
 func handleOpenDataChannel(channel *webrtc.DataChannel, client Client){

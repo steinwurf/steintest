@@ -17,6 +17,7 @@ async function handleCandidate(data){
     console.error('no peerconnection');
     return;}
   rtcPeerConnection.addIceCandidate(data.candidate)
+  console.log(data.candidate)
     console.log("added remote icecandidate")
 }
 
@@ -34,7 +35,6 @@ async function dcHandleMessage(msg){
   else{
     row.delayed = true
   }
-  console.log(row)
 }
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
@@ -68,32 +68,60 @@ async function onDataChannelOpen() {
       await timer(SleepTime * 1000)
     };
   }
+
 // Callback for when the STUN server responds with the ICE candidates.
 function onIceCandidate(event) {
+    console.log("ice is registered and sent")
     if (event && event.candidate) {
       webSocketConnection.send(JSON.stringify({type: 'candidate', payload: event.candidate}));
     }
   }
   
   // Callback for when the SDP offer was successfully created.
-  function onOfferCreated(description) {
-    rtcPeerConnection.setLocalDescription(description);
-    webSocketConnection.send(JSON.stringify({type: 'offer', payload: description}));
-  }
+function onOfferCreated(description) {
+  console.log("offer is created and sent")
+  rtcPeerConnection.setLocalDescription(description);  
+  webSocketConnection.send(JSON.stringify({type: 'offer', payload: description}));
+}
+
+function onConnectionStateChange(event){
+  console.log(event)
+}
+
 
 
 function createWebRTCConnection(){
     const config = { iceServers: [{ url: 'stun:stun.l.google.com:19302' }] };
     rtcPeerConnection = new RTCPeerConnection(config);
+    rtcPeerConnection.onicecandidate = onIceCandidate;
+    //rtcPeerConnection.onconnectionstatechange = onConnectionStateChange
+
+
+
+    rtcPeerConnection.addEventListener("connectionstatechange", ev => {
+      console.log("the pc is:", rtcPeerConnection.connectionState)
+    }, false);
+
     const dataChannelConfig = { ordered: false, maxRetransmits: 0 };
     dataChannel = rtcPeerConnection.createDataChannel('dc', dataChannelConfig);
     dataChannel.onopen = onDataChannelOpen;
+    
+    dataChannel.onerror = (error) => {
+      console.log("Data Channel Error:", error);
+    };
+
+    dataChannel.onclose = function () {
+      console.log("The Data Channel is Closed");
+    };
+
+
     const sdpConstraints = {
       mandatory: {
         OfferToReceiveAudio: false,
         OfferToReceiveVideo: false,
       },
     };
-    rtcPeerConnection.onicecandidate = onIceCandidate;
+
     rtcPeerConnection.createOffer(onOfferCreated, () => {}, sdpConstraints);
+
 }    
