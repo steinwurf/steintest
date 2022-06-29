@@ -87,7 +87,7 @@ func handleOpenDataChannel(channel *webrtc.DataChannel, client Client){
 }
 
 func  onConnectionStateChange(state webrtc.PeerConnectionState){
-	fmt.Println(state)
+	fmt.Println("PeerConnectionState is %v", state)
 }
 
 func onICEConnectionStateChange(state webrtc.ICEConnectionState){
