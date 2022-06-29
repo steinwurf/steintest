@@ -87,15 +87,15 @@ func handleOpenDataChannel(channel *webrtc.DataChannel, client Client){
 }
 
 func  onConnectionStateChange(state webrtc.PeerConnectionState){
-	fmt.Println("PeerConnectionState is %v", state)
+	fmt.Println("PeerConnectionState is ", state)
 }
 
 func onICEConnectionStateChange(state webrtc.ICEConnectionState){
-	fmt.Println(state)
+	fmt.Println("ConnectionState is ", state)
 }
 
 func onICEGatheringStateChange(state webrtc.ICEGathererState){
-	fmt.Println(state)
+	fmt.Println("GatheringState is ", state)
 }
 
 func onNegotiationNeeded(){
@@ -103,5 +103,5 @@ func onNegotiationNeeded(){
 }
 
 func onSignalingStateChange(state webrtc.SignalingState){
-	fmt.Println(state)
+	fmt.Println("SignalingState is ", state)
 }
