@@ -56,17 +56,34 @@ func reader(client *Client, pool *Pool){
 	}
 
 	// event handler for icecandidates
-	client.WebrtcConn.OnICECandidate(
-		func(candidate *webrtc.ICECandidate) {
+	client.WebrtcConn.OnICECandidate(func(candidate *webrtc.ICECandidate) {
 			handleICECandidates(candidate, *client)
-		},
-	)
+	})
 	// event handler for opening a datachannel
-	client.WebrtcConn.OnDataChannel(
-		func(dc *webrtc.DataChannel) {
+	client.WebrtcConn.OnDataChannel(func(dc *webrtc.DataChannel) {
 			handleOpenDataChannel(dc, *client)
-		},
-	)
+	})
+
+	client.WebrtcConn.OnConnectionStateChange(func(state webrtc.PeerConnectionState) {
+		onConnectionStateChange(state)
+	})
+
+	client.WebrtcConn.OnICEConnectionStateChange(func (state webrtc.ICEConnectionState)  {
+		onICEConnectionStateChange(state)
+	})
+
+	client.WebrtcConn.OnICEGatheringStateChange(func (state webrtc.ICEGathererState)  {
+		onICEGatheringStateChange(state)
+	})
+
+	client.WebrtcConn.OnNegotiationNeeded(func ()  {
+		onNegotiationNeeded()
+	})
+
+	client.WebrtcConn.OnSignalingStateChange(func (state webrtc.SignalingState)  {
+		onSignalingStateChange(state)
+	})
+
 
 	for {
 		messageType, p, err := client.SocketConn.ReadMessage()
