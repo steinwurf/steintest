@@ -101,6 +101,8 @@ func reader(client *Client, pool *Pool){
 		if string(p)[9:14] == "offer"{
 			var offerMsg offerMsg	
 			json.Unmarshal(p, &offerMsg)
+			fmt.Println("offer:")
+			fmt.Println(offerMsg)
 			handleOffer(offerMsg, client.SocketConn, messageType, client.WebrtcConn)
 		}
 
