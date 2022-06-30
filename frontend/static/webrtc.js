@@ -9,7 +9,8 @@ async function handleAnswer(answer) {
   }
   var remoteSessionDescription = new RTCSessionDescription(answer)
   await rtcPeerConnection.setRemoteDescription(remoteSessionDescription);
-  console.log("made connection")
+  console.log("answer")
+  console.log(answer)
 }
 
 async function handleCandidate(data){
@@ -91,7 +92,7 @@ function onConnectionStateChange(event){
 
 
 function createWebRTCConnection(){
-    const config = { iceServers: [{ url: 'stun:stun.l.google.com:19302' }] };
+    const config = { iceServers: [{ url: 'stun:stun1.l.google.com:19302' }] };
     rtcPeerConnection = new RTCPeerConnection(config);
     rtcPeerConnection.onicecandidate = onIceCandidate;
     //rtcPeerConnection.onconnectionstatechange = onConnectionStateChange
