@@ -65,6 +65,8 @@ func handleOffer (offerMsg offerMsg, webconn *websocket.Conn, msg_type int, pc *
 }
 
 func handleICECandidates(candidate *webrtc.ICECandidate, client Client){
+	fmt.Println("our Icecandidate")
+	fmt.Println(candidate)
 	if candidate != nil{
 		u, err := json.Marshal(iceCandidate{Type: "candidate", Candidate: *candidate})
 		if err != nil {

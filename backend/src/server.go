@@ -105,6 +105,8 @@ func reader(client *Client, pool *Pool){
 			json.Unmarshal(p, &candidateMsg)
 
 			candidate := webrtc.ICECandidateInit{Candidate: candidateMsg.Payload.Candidate, SDPMid: candidateMsg.Payload.SdpMid, SDPMLineIndex: candidateMsg.Payload.SdpMLineIndex}
+			fmt.Println("remote ice candidates")
+			fmt.Println(candidate)
 			client.WebrtcConn.AddICECandidate(candidate)
 		}
 	}
