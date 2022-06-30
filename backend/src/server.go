@@ -44,7 +44,7 @@ func reader(client *Client, pool *Pool){
 	config := webrtc.Configuration{
 		ICEServers: []webrtc.ICEServer{
 			{
-				URLs: []string{"stun:stun.l.google.com:19302"},
+				URLs: []string{"stun:stun1.l.google.com:19302"},
 			},
 		},
 	}
@@ -105,6 +105,8 @@ func reader(client *Client, pool *Pool){
 			json.Unmarshal(p, &candidateMsg)
 
 			candidate := webrtc.ICECandidateInit{Candidate: candidateMsg.Payload.Candidate, SDPMid: candidateMsg.Payload.SdpMid, SDPMLineIndex: candidateMsg.Payload.SdpMLineIndex}
+			fmt.Println("remote ice candidates")
+			fmt.Println(candidate)
 			client.WebrtcConn.AddICECandidate(candidate)
 		}
 	}
