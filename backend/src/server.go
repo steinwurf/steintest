@@ -46,6 +46,11 @@ func reader(client *Client, pool *Pool){
 			{
 				URLs: []string{"stun:stun1.l.google.com:19302"},
 			},
+			{
+				URLs: []string{"turn:142.93.235.90:3478"},
+				Username: "test",
+				Credential: "test123",
+			},
 		},
 	}
 
