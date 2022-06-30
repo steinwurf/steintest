@@ -92,7 +92,18 @@ function onConnectionStateChange(event){
 
 
 function createWebRTCConnection(){
-    const config = { iceServers: [{ url: 'stun:stun1.l.google.com:19302' }] };
+    const config = { iceServers: 
+    [
+      { 
+        url: 'stun:stun1.l.google.com:19302'
+      },
+      {
+        urls: "turn:142.93.235.90:3478",
+        username: "test",
+        credential: "test123"
+      },
+    ] 
+    };
     rtcPeerConnection = new RTCPeerConnection(config);
     rtcPeerConnection.onicecandidate = onIceCandidate;
     //rtcPeerConnection.onconnectionstatechange = onConnectionStateChange
