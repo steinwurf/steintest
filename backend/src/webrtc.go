@@ -54,6 +54,9 @@ func handleOffer (offerMsg offerMsg, webconn *websocket.Conn, msg_type int, pc *
 	if err != nil{
 		panic(err)
 	}
+	fmt.Println("Answer:")
+	fmt.Println(answer)
+	fmt.Println("local description is set")
 	pc.SetLocalDescription(answer)
 	
 	u, err := json.Marshal(answer)
