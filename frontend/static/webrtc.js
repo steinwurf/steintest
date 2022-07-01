@@ -97,7 +97,7 @@ function createWebRTCConnection(){
     const config = { iceServers: 
     [
       { 
-        url: 'stun:stun1.l.google.com:19302'
+        urls: 'stun:stun1.l.google.com:19302'
       },
       {
         urls: "turn:142.93.235.90:3478",
