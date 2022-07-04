@@ -37,7 +37,7 @@ type webSocketConnection struct{
 
 type iceCandidate struct{
 	Type string `json:"type"`
-	Candidate webrtc.ICECandidate `json:"candidate"` 
+	Candidate webrtc.ICECandidateInit `json:"candidate"` 
 }
 
 func handleOffer (offerMsg offerMsg, webconn *websocket.Conn, msg_type int, pc *webrtc.PeerConnection){
@@ -69,13 +69,18 @@ func handleOffer (offerMsg offerMsg, webconn *websocket.Conn, msg_type int, pc *
 
 func handleICECandidates(candidate *webrtc.ICECandidate, client Client){
 	fmt.Println("our Icecandidate")
-	fmt.Println(candidate)
 	if candidate != nil{
-		u, err := json.Marshal(iceCandidate{Type: "candidate", Candidate: *candidate})
+
+/* 		u, err := json.Marshal(iceCandidate{Type: "candidate", Candidate: *candidate})
+		if err != nil {
+			panic(err)
+		} */
+
+		object, err := json.Marshal(iceCandidate{Type:"candidate", Candidate:  candidate.ToJSON()})
 		if err != nil {
 			panic(err)
 		}
-		client.SocketConn.WriteMessage(1, u)
+		client.SocketConn.WriteMessage(1, object)
 	}
 }
 
