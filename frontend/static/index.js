@@ -78,6 +78,8 @@ function createWebSocketConnection(selectedServer){
   //Recving data from the server through the web socket
   Connection.onmessage = function(event){
     var data = JSON.parse(event.data)
+    console.log("nice data")
+    console.log(data)
 
     switch (data.type){
       case "answer":

@@ -17,9 +17,17 @@ async function handleCandidate(data){
   if (!rtcPeerConnection) {
     console.error('no peerconnection');
     return;}
-  rtcPeerConnection.addIceCandidate(data.candidate)
-  console.log(data.candidate)
-    console.log("added remote icecandidate")
+
+
+  iceCandidate = new RTCIceCandidate(data.candidate)
+  console.log("remote icecandidate")
+  console.log(iceCandidate)
+
+
+
+  rtcPeerConnection.addIceCandidate(iceCandidate)
+/*   console.log(data.candidate)
+    console.log("added remote icecandidate") */
 }
 
 async function dcHandleMessage(msg){
@@ -73,6 +81,7 @@ async function onDataChannelOpen() {
 // Callback for when the STUN server responds with the ICE candidates.
 function onIceCandidate(event) {
     console.log("ice is registered and sent")
+    console.log(event.candidate)
     if (event && event.candidate) {
       webSocketConnection.send(JSON.stringify({type: 'candidate', payload: event.candidate}));
     }
@@ -100,7 +109,7 @@ function createWebRTCConnection(){
         urls: 'stun:stun1.l.google.com:19302'
       },
       {
-        urls: "turn:142.93.235.90:3478",
+        urls: "turn:142.93.235.90:3478?transport=tcp",
         username: "test",
         credential: "test123"
       },
