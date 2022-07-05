@@ -60,6 +60,12 @@ async function sendPackets(batchID){
   }
 }
 
+function onDataChannelClose(){
+  CreatePlots()
+
+  DisableComponents(false)
+}
+
 
 
 // Callback for when the data channel was successfully opened.
@@ -69,6 +75,7 @@ async function onDataChannelOpen() {
 
     console.log('Data channel opened!');
     dataChannel.onmessage = dcHandleMessage
+    dataChannel.onclose = onDataChannelClose
 
     allData = []
     console.log(TotalNumberOfPackets)
@@ -76,6 +83,8 @@ async function onDataChannelOpen() {
       sendPackets(i)
       await timer(SleepTime * 1000)
     };
+    await timer(1 * 1000) 
+    dataChannel.close()
   }
 
 // Callback for when the STUN server responds with the ICE candidates.

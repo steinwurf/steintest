@@ -60,7 +60,7 @@ function createWebSocketConnection(selectedServer){
     webSocketConnection.close()
   }
 
-  let Connection = new WebSocket(selectedServer)
+  var Connection = new WebSocket(selectedServer)
   console.log("Attempting to connect to server via websocket")
 
   Connection.onopen = () => {
@@ -68,7 +68,7 @@ function createWebSocketConnection(selectedServer){
   }
 
   Connection.onclose = (event) => {
-    console.log("Websocket clossed", event)
+    console.log("Websocket clo sed", event)
   }
 
   Connection.onerror = (error) => {
@@ -78,8 +78,6 @@ function createWebSocketConnection(selectedServer){
   //Recving data from the server through the web socket
   Connection.onmessage = function(event){
     var data = JSON.parse(event.data)
-    console.log("nice data")
-    console.log(data)
 
     switch (data.type){
       case "answer":
@@ -227,14 +225,14 @@ async function startTest(){
   else{
     onDataChannelOpen()
   }
-
+/* 
   await timer(DurationSlider.value * 1000)
 
   CreatePlots()
 
   DisableComponents(false)
   
-
+ */
 }
 
 startbutton.onclick = startTest
