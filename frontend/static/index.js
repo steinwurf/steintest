@@ -47,6 +47,16 @@ DelaySlider.oninput = function() {
 }
 
 
+const finishedTestEvent = new Event("finishedTestEvent")
+
+document.addEventListener("finishedTestEvent", e => {
+  CreatePlots()
+
+  DisableComponents(false)
+})
+
+
+
 serverPickComponent.oninput = function(){
   var selectedServer = serverPickComponent.value;
 
@@ -68,7 +78,7 @@ function createWebSocketConnection(selectedServer){
   }
 
   Connection.onclose = (event) => {
-    console.log("Websocket clo sed", event)
+    console.log("Websocket closed", event)
   }
 
   Connection.onerror = (error) => {
@@ -225,14 +235,7 @@ async function startTest(){
   else{
     onDataChannelOpen()
   }
-/* 
-  await timer(DurationSlider.value * 1000)
 
-  CreatePlots()
-
-  DisableComponents(false)
-  
- */
 }
 
 startbutton.onclick = startTest

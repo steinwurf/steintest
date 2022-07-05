@@ -9,6 +9,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/pion/webrtc/v3"
 	"github.com/rs/xid"
+	"sync"
 )
 
 type Client struct{
@@ -16,6 +17,12 @@ type Client struct{
 	SocketConn *websocket.Conn
 	WebrtcConn *webrtc.PeerConnection
 }
+
+type Server struct{
+	Pool *Pool
+	Mutex sync.Mutex
+}
+
 
 type Pool struct{
 	Clients map[*Client]bool
@@ -141,10 +148,9 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 
 
 func setupRoutes() {
-
-	pool := NewPool()
+	server := Server{Pool: NewPool(), Mutex: sync.Mutex{}}
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		wsEndpoint(pool, w, r)
+		wsEndpoint(server.Pool, w, r)
 	})
 
 }

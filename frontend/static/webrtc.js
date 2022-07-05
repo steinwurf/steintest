@@ -84,7 +84,8 @@ async function onDataChannelOpen() {
       await timer(SleepTime * 1000)
     };
     await timer(1 * 1000) 
-    dataChannel.close()
+    document.dispatchEvent(finishedTestEvent)
+
   }
 
 // Callback for when the STUN server responds with the ICE candidates.
@@ -109,7 +110,6 @@ function onConnectionStateChange(event){
 function onIceCandidateError(event){
   console.log(event)
 }
-
 
 function createWebRTCConnection(){
     const config = { iceServers: 
