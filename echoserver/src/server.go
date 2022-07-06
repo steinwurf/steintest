@@ -101,7 +101,7 @@ func reader(client *Client, pool *Pool){
 		messageType, p, err := client.SocketConn.ReadMessage()
 		if err != nil {
 			log.Println(err)
-			return
+				
 		}
 
 		// It is a offer:
@@ -160,5 +160,4 @@ func Run() {
 	setupRoutes()
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
-
 
