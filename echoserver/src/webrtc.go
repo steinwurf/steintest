@@ -54,9 +54,6 @@ func handleOffer (offerMsg offerMsg, webconn *websocket.Conn, msg_type int, pc *
 	if err != nil{
 		panic(err)
 	}
-	fmt.Println("Answer:")
-	fmt.Println(answer)
-	fmt.Println("local description is set")
 	pc.SetLocalDescription(answer)
 	
 	u, err := json.Marshal(answer)
@@ -68,7 +65,6 @@ func handleOffer (offerMsg offerMsg, webconn *websocket.Conn, msg_type int, pc *
 }
 
 func handleICECandidates(candidate *webrtc.ICECandidate, client Client){
-	fmt.Println("our Icecandidate")
 	if candidate != nil{
 
 /* 		u, err := json.Marshal(iceCandidate{Type: "candidate", Candidate: *candidate})
@@ -86,7 +82,6 @@ func handleICECandidates(candidate *webrtc.ICECandidate, client Client){
 
 func handleMessageDataChannel(msg webrtc.DataChannelMessage, client Client, channel *webrtc.DataChannel ){
 	channel.Send(msg.Data)
-	fmt.Println(string(msg.Data))
 }
 
 func handleOpenDataChannel(channel *webrtc.DataChannel, client Client){

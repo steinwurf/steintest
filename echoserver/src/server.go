@@ -23,7 +23,6 @@ type Server struct{
 	Mutex sync.Mutex
 }
 
-
 type Pool struct{
 	Clients map[*Client]bool
 }
@@ -33,7 +32,6 @@ func NewPool() *Pool {
 		Clients: make( map[*Client]bool),
 	}
 }
-
 
 var upgrader = websocket.Upgrader{
 	ReadBufferSize: 1024,
@@ -47,7 +45,13 @@ func reader(client *Client, pool *Pool){
 		client.SocketConn.Close()
 		fmt.Printf("client with id  %s has now left. %d users still connected \n", client.ID, len(pool.Clients))
 	}()
-
+	
+	defer func() {
+        if r := recover(); r != nil {
+            fmt.Println("Recovered. Error:\n", r)
+        }
+    }()
+	
 	config := webrtc.Configuration{
 		ICEServers: []webrtc.ICEServer{
 			{
@@ -101,28 +105,32 @@ func reader(client *Client, pool *Pool){
 		messageType, p, err := client.SocketConn.ReadMessage()
 		if err != nil {
 			log.Println(err)
-				
+			break	
 		}
+		//unmarshalling the message to a map
+		var message map[string]interface{}
+		json.Unmarshal(p, &message)
 
-		// It is a offer:
-		if string(p)[9:14] == "offer"{
+		switch message["type"]{
+
+		case "offer":
 			var offerMsg offerMsg	
 			json.Unmarshal(p, &offerMsg)
-			fmt.Println("offer:")
-			fmt.Println(offerMsg)
-			handleOffer(offerMsg, client.SocketConn, messageType, client.WebrtcConn)
-		}
 
-		//its a candidate:
-		if string(p)[9:18] == "candidate"{
+			handleOffer(offerMsg, client.SocketConn, messageType, client.WebrtcConn)
+		
+		case "candidate":
 			var candidateMsg candidateMsg	
 			json.Unmarshal(p, &candidateMsg)
 
 			candidate := webrtc.ICECandidateInit{Candidate: candidateMsg.Payload.Candidate, SDPMid: candidateMsg.Payload.SdpMid, SDPMLineIndex: candidateMsg.Payload.SdpMLineIndex}
-			fmt.Println("remote ice candidates")
-			fmt.Println(candidate)
 			client.WebrtcConn.AddICECandidate(candidate)
+
+		default:
+			fmt.Println(message)
+		
 		}
+
 	}
 }
 
@@ -133,7 +141,7 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 	client := Client{
 		ID: xid.New().String(),
 	}
-
+	
 	pool.Clients[&client] = true
 
 	var err error
@@ -141,9 +149,15 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 	if err != nil{
 		log.Println(err)
 	}
-
+	
 	log.Println("client succesfully connected to the server")
 	go reader(&client, pool)
+
+	// here we have all the info of the user (ip, useragent etc)
+	// Here it should be logged into a database
+	// or maybe not because the user is not destined to click run test, but the data is here
+
+
 }
 
 

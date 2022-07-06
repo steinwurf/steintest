@@ -9,8 +9,6 @@ async function handleAnswer(answer) {
   }
   var remoteSessionDescription = new RTCSessionDescription(answer)
   await rtcPeerConnection.setRemoteDescription(remoteSessionDescription);
-  console.log("answer")
-  console.log(answer)
 }
 
 async function handleCandidate(data){
@@ -26,8 +24,6 @@ async function handleCandidate(data){
 
 
   rtcPeerConnection.addIceCandidate(iceCandidate)
-/*   console.log(data.candidate)
-    console.log("added remote icecandidate") */
 }
 
 async function dcHandleMessage(msg){
@@ -61,9 +57,7 @@ async function sendPackets(batchID){
 }
 
 function onDataChannelClose(){
-  CreatePlots()
-
-  DisableComponents(false)
+  console.log("data channel is closed")
 }
 
 

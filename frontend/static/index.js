@@ -50,9 +50,12 @@ DelaySlider.oninput = function() {
 const finishedTestEvent = new Event("finishedTestEvent")
 
 document.addEventListener("finishedTestEvent", e => {
-  CreatePlots()
+  webSocketConnection.send(allData) 
 
+  CreatePlots()
   DisableComponents(false)
+
+
 })
 
 
