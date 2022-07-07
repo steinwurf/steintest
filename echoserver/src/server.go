@@ -11,7 +11,6 @@ import (
 	"github.com/rs/xid"
 	"sync"
 )
-
 type Client struct{
 	ID string
 	SocketConn *websocket.Conn
@@ -39,6 +38,8 @@ var upgrader = websocket.Upgrader{
 }
 
 func reader(client *Client, pool *Pool){
+
+	DBClient := ConnectToDB()
 
 	defer func(){
 		delete(pool.Clients, client)
@@ -127,6 +128,8 @@ func reader(client *Client, pool *Pool){
 			client.WebrtcConn.AddICECandidate(candidate)
 		
 		case "packetData":
+			collection := DBClient.Database("steintest").Collection("sessiondata")
+			fmt.Println(collection)
 			// export the data to the db
 		
 
@@ -156,8 +159,6 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 	log.Println("client succesfully connected to the server")
 	go reader(&client, pool)
 
-
-
 	// here we have all the info of the user (ip, useragent etc)
 	// Here it should be logged into a database
 	// or maybe not because the user is not destined to click run test, but the data is here
@@ -179,4 +180,6 @@ func Run() {
 	setupRoutes()
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
+
+
 
