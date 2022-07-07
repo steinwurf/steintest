@@ -125,12 +125,15 @@ func reader(client *Client, pool *Pool){
 
 			candidate := webrtc.ICECandidateInit{Candidate: candidateMsg.Payload.Candidate, SDPMid: candidateMsg.Payload.SdpMid, SDPMLineIndex: candidateMsg.Payload.SdpMLineIndex}
 			client.WebrtcConn.AddICECandidate(candidate)
+		
+		case "packetData":
+			// export the data to the db
+		
 
 		default:
-			fmt.Println(message)
-		
-		}
+			fmt.Println(string(p))
 
+		}
 	}
 }
 
