@@ -153,6 +153,8 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 	log.Println("client succesfully connected to the server")
 	go reader(&client, pool)
 
+
+
 	// here we have all the info of the user (ip, useragent etc)
 	// Here it should be logged into a database
 	// or maybe not because the user is not destined to click run test, but the data is here
