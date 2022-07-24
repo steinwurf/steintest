@@ -10,11 +10,16 @@ import (
 	"github.com/pion/webrtc/v3"
 	"github.com/rs/xid"
 	"sync"
+	"strings"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 type Client struct{
 	ID string
 	SocketConn *websocket.Conn
 	WebrtcConn *webrtc.PeerConnection
+	DBClient *mongo.Client
+	UserAgent string
+	IP string
 }
 
 type Server struct{
@@ -39,7 +44,8 @@ var upgrader = websocket.Upgrader{
 
 func reader(client *Client, pool *Pool){
 
-	DBClient := ConnectToDB()
+	client.DBClient = ConnectToDB()
+	fmt.Println("succesfully connected to db")
 
 	defer func(){
 		delete(pool.Clients, client)
@@ -76,7 +82,7 @@ func reader(client *Client, pool *Pool){
 	client.WebrtcConn.OnICECandidate(func(candidate *webrtc.ICECandidate) {
 			handleICECandidates(candidate, *client)
 	})
-	// event handler for opening a datachannel
+
 	client.WebrtcConn.OnDataChannel(func(dc *webrtc.DataChannel) {
 			handleOpenDataChannel(dc, *client)
 	})
@@ -100,7 +106,6 @@ func reader(client *Client, pool *Pool){
 	client.WebrtcConn.OnSignalingStateChange(func (state webrtc.SignalingState)  {
 		onSignalingStateChange(state)
 	})
-
 
 	for {
 		messageType, p, err := client.SocketConn.ReadMessage()
@@ -128,10 +133,7 @@ func reader(client *Client, pool *Pool){
 			client.WebrtcConn.AddICECandidate(candidate)
 		
 		case "packetData":
-			collection := DBClient.Database("steintest").Collection("sessiondata")
-			fmt.Println(collection)
-			// export the data to the db
-		
+			InsertData(p[31:len(p)-1], client)
 
 		default:
 			fmt.Println(string(p))
@@ -146,6 +148,9 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 
 	client := Client{
 		ID: xid.New().String(),
+		// This line removes the port number from the ip
+		IP: strings.Split(r.RemoteAddr, ":")[0],
+		UserAgent: r.UserAgent(),
 	}
 	
 	pool.Clients[&client] = true
