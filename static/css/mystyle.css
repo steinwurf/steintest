@@ -155,3 +155,18 @@ select {
     margin-left: -5px;
     margin-top: -1px;
   }
+
+#myProgress {
+  margin-top: 20px;
+  width: 100%;
+  background-color: grey;
+}
+
+#myBar {
+  width: 0%;
+  height: 30px;
+  background-color: #03a9f4;
+  text-align: center; /* To center it horizontally (if you want) */
+  line-height: 30px; /* To center it vertically */
+  color: white;
+}

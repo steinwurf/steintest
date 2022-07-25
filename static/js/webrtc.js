@@ -1,6 +1,6 @@
 
 batchSize = 50
-
+var TotalNumberOfPackets = rangeF.value * rangeD.value
 
 async function handleAnswer(answer) {
   if (!rtcPeerConnection) {
@@ -64,8 +64,8 @@ function onDataChannelClose(){
 
 // Callback for when the data channel was successfully opened.
 async function onDataChannelOpen() {
-    var TotalNumberOfPackets = rangeF.value * rangeD.value
     SleepTime = 1 / rangeF.value * batchSize
+    var TotalNumberOfPackets = rangeF.value * rangeD.value
 
     console.log('Data channel opened!');
     dataChannel.onmessage = dcHandleMessage
@@ -73,8 +73,9 @@ async function onDataChannelOpen() {
 
     allData = []
     console.log(TotalNumberOfPackets)
-    for (let i = 0; i < TotalNumberOfPackets; i += 50){
+    for (let i = 0; i < TotalNumberOfPackets + batchSize; i += 50){
       sendPackets(i)
+      loadingBar(i, TotalNumberOfPackets)
       await timer(SleepTime * 1000)
     };
     await timer(1 * 1000) 

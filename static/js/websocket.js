@@ -193,6 +193,7 @@ function CreatePlots(){
 
 
 async function startTest(){
+  move()
   DisableComponents(true)
   
   if (typeof rtcPeerConnection == "undefined"){
@@ -205,3 +206,31 @@ async function startTest(){
 }
 
 startbutton.onclick = startTest
+
+
+// Loading bar test
+var i = 0;
+function move(currentpacketid) {
+    function frame() {
+      if (width >= 100) {
+        i = 0;
+      } else {
+        width++;
+        elem.style.width = width + "%";
+        elem.innerHTML = width + "%";
+      }
+    }
+}
+
+function loadingBar(currentpacketID, TotalNumberOfPackets){
+  elem = document.getElementById("myBar");
+  width = (currentpacketID / TotalNumberOfPackets) * 100
+  console.log(currentpacketID)
+  if (width > 100) {
+    elem.style.width = "100%";
+    elem.innerHTML = "100%";
+  } else {
+    elem.style.width = Math.round(width) + "%";
+    elem.innerHTML = Math.round(width) + "%";
+  }
+}
