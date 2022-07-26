@@ -53,7 +53,6 @@ async function dcHandleMessage(msg){
   else{
     row.delayed = true
   }
-  console.log(row)
 }
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
