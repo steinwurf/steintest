@@ -8,10 +8,7 @@ myclient = pymongo.MongoClient("mongodb+srv://PythonClient:4D0m68QC172aXo9T@db-m
 db = myclient["steintest"]
 collection = db["sessiondata"]
 
-query = {"destinationserver" : "New York"}
-
-RTT_list = []
-
+""" query = {"destinationserver" : "New York"}
 
 document = collection.aggregate([
     {
@@ -42,7 +39,41 @@ for doc in document:
     data = doc['res']
 
     fig = px.ecdf(data, ecdfmode="reversed" )
+    fig.show() """
+
+
+
+document = collection.aggregate(
+    [
+    {
+        '$match': {
+            'ConsLostPacketData': {
+                '$ne': None
+            }
+        }
+    }, {
+        '$project': {
+            'ConsLostPacketData': 1, 
+            '_id': 0
+        }
+    }, {
+        '$unwind': {
+            'path': '$ConsLostPacketData'
+        }
+    }, {
+        '$group': {
+            '_id': 'Consecutive lost packets', 
+            'res': {
+                '$push': '$ConsLostPacketData'
+            }
+        }
+    }
+    ]
+)
+
+for doc in document:
+    data = doc['res']
+
+    fig = px.histogram(data )
     fig.show()
-
-
     
