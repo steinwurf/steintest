@@ -20,6 +20,7 @@ type Client struct{
 	DBClient *mongo.Client
 	UserAgent string
 	IP string
+	TestData *TestData
 }
 
 type Server struct{
@@ -133,7 +134,7 @@ func reader(client *Client, pool *Pool){
 			client.WebrtcConn.AddICECandidate(candidate)
 		
 		case "packetData":
-			InsertData(p[31:len(p)-1], client)
+			InsertData(p, client)
 
 		default:
 			fmt.Println(string(p))
@@ -152,6 +153,7 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 		IP: strings.Split(r.RemoteAddr, ":")[0],
 		UserAgent: r.UserAgent(),
 	}
+	fmt.Println(r.RemoteAddr)
 	
 	pool.Clients[&client] = true
 
@@ -163,11 +165,6 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 	
 	log.Println("client succesfully connected to the server")
 	go reader(&client, pool)
-
-	// here we have all the info of the user (ip, useragent etc)
-	// Here it should be logged into a database
-	// or maybe not because the user is not destined to click run test, but the data is here
-
 
 }
 

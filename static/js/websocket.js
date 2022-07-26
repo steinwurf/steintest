@@ -6,8 +6,24 @@ var serverPickComponent = document.getElementById("serverpick");
 const finishedTestEvent = new Event("finishedTestEvent")
 
 document.addEventListener("finishedTestEvent", e => {
-  webSocketConnection.send(JSON.stringify({type: "packetData", payload :allData})) 
+
   CreatePlots()
+
+  NumberOfPackets = allData.length
+
+  PacketLossPercentage = (NumberOfPackets - LostRecvData[0]) / NumberOfPackets * 100
+
+  
+  webSocketConnection.send(JSON.stringify({type: "packetData", payload :
+  {PacketData : allData,
+  "PacketLossPercentage": PacketLossPercentage,
+  "NumberOfPackets": NumberOfPackets,
+  "ConsLostPacketData": ConsLostPacketData,
+  "Frequency" : parseInt(rangeF.value),
+  "Duration" : parseInt(rangeD.value),
+  "AcceptableDelay" : parseInt(rangeA.value)
+  ,}}))
+  
   DisableComponents(false)
 
 
