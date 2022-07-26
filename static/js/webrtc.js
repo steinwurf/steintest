@@ -27,12 +27,25 @@ async function handleCandidate(data){
 }
 
 async function dcHandleMessage(msg){
-  var enc = new TextDecoder("utf-8")
-  var row = allData[enc.decode(msg.data)]
+  // chrome and firefox have different ways of handling the message therfore we need to check for both
+  
+  let chromeAgent = navigator.userAgent.indexOf("Chrome") > -1;
+
+  let firefoxAgent = navigator.userAgent.indexOf("Firefox") > -1;
+
+  if(chromeAgent){
+    var enc = new TextDecoder("utf-8")
+    var decodedId = enc.decode(msg.data)
+  }
+  else if(firefoxAgent){
+    decodedId = await msg.data.text()
+  }
+
+
+  var row = allData[decodedId]
   row.recvAt = Date.now()
   row.recv = true
   row.delay = row.recvAt - row.sentAt
-
 
   if (row.delay <= rangeA.value){
     row.delayed = false
@@ -40,6 +53,7 @@ async function dcHandleMessage(msg){
   else{
     row.delayed = true
   }
+  console.log(row)
 }
 
 const timer = ms => new Promise(res => setTimeout(res, ms))

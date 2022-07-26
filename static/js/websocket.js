@@ -241,7 +241,6 @@ function move(currentpacketid) {
 function loadingBar(currentpacketID, TotalNumberOfPackets){
   elem = document.getElementById("myBar");
   width = (currentpacketID / TotalNumberOfPackets) * 100
-  console.log(currentpacketID)
   if (width > 100) {
     elem.style.width = "100%";
     elem.innerHTML = "100%";
