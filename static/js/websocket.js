@@ -1,8 +1,5 @@
-var DelaySlider = document.getElementById("DelaySlider");
-var startbutton = document.getElementById("startbutton")
 
-var serverPickComponent = document.getElementById("serverpick");
-
+// When the test has finished an event is being triggered and this function is called
 const finishedTestEvent = new Event("finishedTestEvent")
 
 document.addEventListener("finishedTestEvent", e => {
@@ -13,7 +10,6 @@ document.addEventListener("finishedTestEvent", e => {
 
   PacketLossPercentage = (NumberOfPackets - LostRecvData[0]) / NumberOfPackets * 100
 
-  
   webSocketConnection.send(JSON.stringify({type: "packetData", payload :
   {PacketData : allData,
   "PacketLossPercentage": PacketLossPercentage,
@@ -21,23 +17,13 @@ document.addEventListener("finishedTestEvent", e => {
   "ConsLostPacketData": ConsLostPacketData,
   "Frequency" : parseInt(rangeF.value),
   "Duration" : parseInt(rangeD.value),
-  "AcceptableDelay" : parseInt(rangeA.value)
+  "AcceptableDelay" : parseInt(rangeA.value),
+  "TimeStamp" : new Date().getTime()
   ,}}))
   
-  DisableComponents(false)
-
+  ChangeStateOfComponents(false)
 
 })
-
-
-
-serverPickComponent.oninput = function(){
-  var selectedServer = serverPickComponent.value;
-
-  webSocketConnection = createWebSocketConnection(selectedServer)
-}
-
-var webSocketConnection = createWebSocketConnection(serverPickComponent.value)
 
 function createWebSocketConnection(selectedServer){
   if (typeof webSocketConnection !== "undefined"){
@@ -75,7 +61,7 @@ function createWebSocketConnection(selectedServer){
   return Connection 
 }
 
-function DisableComponents(bool){
+function ChangeStateOfComponents(bool){
   startbutton.disabled = bool
   rangeD.disabled = bool
   rangeF.disabled = bool
@@ -209,9 +195,10 @@ function CreatePlots(){
 
 
 async function startTest(){
-  move()
-  DisableComponents(true)
+
+  ChangeStateOfComponents(true)
   
+  // If the websocket is not connected, create a new one
   if (typeof rtcPeerConnection == "undefined"){
     createWebRTCConnection()
   }
@@ -221,23 +208,7 @@ async function startTest(){
 
 }
 
-startbutton.onclick = startTest
-
-
-// Loading bar test
-var i = 0;
-function move(currentpacketid) {
-    function frame() {
-      if (width >= 100) {
-        i = 0;
-      } else {
-        width++;
-        elem.style.width = width + "%";
-        elem.innerHTML = width + "%";
-      }
-    }
-}
-
+// The functionality of the loading bar
 function loadingBar(currentpacketID, TotalNumberOfPackets){
   elem = document.getElementById("myBar");
   width = (currentpacketID / TotalNumberOfPackets) * 100

@@ -132,6 +132,7 @@ function createWebRTCConnection(){
       },
     ] 
     };
+
     rtcPeerConnection = new RTCPeerConnection(config);
     rtcPeerConnection.onicecandidate = onIceCandidate;
     rtcPeerConnection.onicecandidateerror = onIceCandidateError
@@ -144,7 +145,7 @@ function createWebRTCConnection(){
     const dataChannelConfig = { ordered: false, maxRetransmits: 0 };
     dataChannel = rtcPeerConnection.createDataChannel('dc', dataChannelConfig);
     dataChannel.onopen = onDataChannelOpen;
-    
+
     dataChannel.onerror = (error) => {
       console.log("Data Channel Error:", error);
     };
@@ -152,7 +153,6 @@ function createWebRTCConnection(){
     dataChannel.onclose = function () {
       console.log("The Data Channel is Closed");
     };
-
 
     const sdpConstraints = {
       mandatory: {

@@ -1,3 +1,6 @@
+// In this file all functionality for the original website is defined
+
+
 (function ($) {
     "use strict";
 

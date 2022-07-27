@@ -1,4 +1,9 @@
+// In this file the sliders are defined 
+// this files also defines some of the behavoir of buttons etc.
 
+
+
+// The slider for the packet size
 rangeP = document.getElementById('rangeP'),
 rangedivP = document.getElementById('rangedivP'),
 setValue = ()=>{
@@ -11,6 +16,7 @@ document.addEventListener("DOMContentLoaded", setValue);
 rangeP.addEventListener('input', setValue);
 
 
+// The slider for frequency of packets
 rangeF = document.getElementById('rangeF'),
 rangedivF = document.getElementById('rangedivF'),
 setValue = ()=>{
@@ -22,6 +28,8 @@ setValue = ()=>{
 document.addEventListener("DOMContentLoaded", setValue);
 rangeF.addEventListener('input', setValue);
 
+
+// The slider for the duration of the test
 rangeD = document.getElementById('rangeD'),
 rangedivD = document.getElementById('rangedivD'),
 setValue = ()=>{
@@ -33,6 +41,9 @@ setValue = ()=>{
 document.addEventListener("DOMContentLoaded", setValue);
 rangeD.addEventListener('input', setValue);
 
+
+
+// The slider for the acceptable delay
 rangeA = document.getElementById('rangeA'),
 rangedivA = document.getElementById('rangedivA'),
 setValue = ()=>{
@@ -45,5 +56,19 @@ document.addEventListener("DOMContentLoaded", setValue);
 rangeA.addEventListener('input', setValue);
 
 
+var DelaySlider = document.getElementById("DelaySlider");
+var startbutton = document.getElementById("startbutton")
+
+var serverPickComponent = document.getElementById("serverpick");
 
 
+// every time the user picks another server, the server picker is updated and a websocket is created
+serverPickComponent.oninput = function(){
+    var selectedServer = serverPickComponent.value;
+    webSocketConnection = createWebSocketConnection(selectedServer)
+  }
+// the websocket is first initilized here when the site is loaded
+var webSocketConnection = createWebSocketConnection(serverPickComponent.value)
+
+// The start button is clicked, the test is started
+startbutton.onclick = startTest
