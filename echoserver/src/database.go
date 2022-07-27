@@ -39,8 +39,8 @@ type SingleDataEntry struct{
 type TestData struct {
 	ID primitive.ObjectID `bson:"_id,omitempty"`
 	PacketData []SingleDataEntry `json:"PacketData" bson:"TestData,omitempty"`
-	PacketLossPercentage int `json:"PacketLossPercentage" bson:"PacketLossPercent,omitempty"`
-	ConsLostPacketData []int `json:"ConsLostPacketData" bson:"ConsLostPacketData,omitempty"`
+	PacketLossPercentage int `json:"PacketLossPercentage" bson:"PacketLossPercentage"`
+	ConsLostPacketData []int `json:"ConsLostPacketData" bson:"ConsLostPacketData"`
 	Frequency int `json:"Frequency" bson:"Frequency,omitempty"`
 	Duration int `json:"Duration" bson:"Duration,omitempty"`
 	AcceptableDelay int `json:"AcceptableDelay" bson:"AcceptableDelay,omitempty"`
@@ -48,6 +48,7 @@ type TestData struct {
 	DestinationServer string `json:"DestinationServer" bson:DestinationServer",omitempty"`
 	UserAgent UserAgent `json:"UserAgent" bson:"UserAgent,omitempty"`
 	NumberOfPackets int `json:"NumberOfPackets" bson:"NumberOfPackets,omitempty"`
+	TimeStamp int `json:"TimeStamp" bson:"TimeStamp,omitempty"`
 
 }
 type DataFromClient struct {
@@ -73,6 +74,7 @@ func InsertUA(TestData *TestData, client *Client){
 }
 
 func InsertData(data []byte, client *Client){
+
 
 	DataFromClient := DataFromClient{}
 	json.Unmarshal(data, &DataFromClient)
