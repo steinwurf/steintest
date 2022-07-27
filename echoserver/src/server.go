@@ -153,7 +153,6 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 		IP: strings.Split(r.RemoteAddr, ":")[0],
 		UserAgent: r.UserAgent(),
 	}
-	fmt.Println(r.RemoteAddr)
 	
 	pool.Clients[&client] = true
 

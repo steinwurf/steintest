@@ -39,7 +39,7 @@ type SingleDataEntry struct{
 type TestData struct {
 	ID primitive.ObjectID `bson:"_id,omitempty"`
 	PacketData []SingleDataEntry `json:"PacketData" bson:"TestData,omitempty"`
-	PacketLossPercentage int `json:"PacketLossPercentage" bson:"PacketLossPercentage"`
+	PacketLossPercentage float32 `json:"PacketLossPercentage" bson:"PacketLossPercentage"`
 	ConsLostPacketData []int `json:"ConsLostPacketData" bson:"ConsLostPacketData"`
 	Frequency int `json:"Frequency" bson:"Frequency,omitempty"`
 	Duration int `json:"Duration" bson:"Duration,omitempty"`
@@ -91,19 +91,19 @@ func InsertData(data []byte, client *Client){
 
 	DataFromClient.Payload.UserAgent = agent
 
-	fmt.Println(DataFromClient.Payload)
-
 
 	// insert the data into the database
 
-	db := client.DBClient.Database(dataBaseName)
+/* 	db := client.DBClient.Database(dataBaseName)
 	coll := db.Collection(collectionName)
 
 	_, err := coll.InsertOne(context.TODO(), DataFromClient.Payload)
     if err != nil {
         fmt.Println(err)
         return
-    }
+    } */
+	fmt.Println(DataFromClient.Payload.PacketLossPercentage)
+
 }
 
 
