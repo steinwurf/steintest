@@ -94,16 +94,14 @@ func InsertData(data []byte, client *Client){
 
 	// insert the data into the database
 
-/* 	db := client.DBClient.Database(dataBaseName)
+	db := client.DBClient.Database(dataBaseName)
 	coll := db.Collection(collectionName)
 
 	_, err := coll.InsertOne(context.TODO(), DataFromClient.Payload)
     if err != nil {
         fmt.Println(err)
         return
-    } */
-	fmt.Println(DataFromClient.Payload.PacketLossPercentage)
-
+    }
 }
 
 
