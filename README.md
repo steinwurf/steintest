@@ -2,9 +2,10 @@
 A packet loss measuring tool, measuring packet loss over webrtc connections.   
 
 # Usage
-
+ *WIP
+ 
 # Developer
-## Adding new server 
+## Adding a new server 
 * Create a Digital ocean droplet
 * Add the IP of the droplet to the serverpicket on the frontend 
 * Add the IP to trusted IPs on the mongodb cluster
@@ -17,10 +18,9 @@ A packet loss measuring tool, measuring packet loss over webrtc connections.
 
 
 ## Updating the website
-  
-
-
+ * WIP
 
 
 
 # License
+This project is licensed under the MIT License - see the LICENSE.md file for details
