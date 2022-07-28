@@ -18,6 +18,7 @@ document.addEventListener("finishedTestEvent", e => {
   "Frequency" : parseInt(rangeF.value),
   "Duration" : parseInt(rangeD.value),
   "AcceptableDelay" : parseInt(rangeA.value),
+  "PacketSize" : parseInt(rangeP.value),
   "TimeStamp" : new Date().getTime()
   ,}}))
   

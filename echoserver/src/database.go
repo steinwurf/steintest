@@ -49,6 +49,7 @@ type TestData struct {
 	UserAgent UserAgent `json:"UserAgent" bson:"UserAgent,omitempty"`
 	NumberOfPackets int `json:"NumberOfPackets" bson:"NumberOfPackets,omitempty"`
 	TimeStamp int `json:"TimeStamp" bson:"TimeStamp,omitempty"`
+	PacketSize int `json:"PacketSize" bson:"PacketSize,omitempty"`
 
 }
 type DataFromClient struct {

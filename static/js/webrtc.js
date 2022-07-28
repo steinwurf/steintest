@@ -41,8 +41,8 @@ async function dcHandleMessage(msg){
     decodedId = await msg.data.text()
   }
 
-
-  var row = allData[decodedId]
+  let id = decodedId.split(" ")[0]
+  var row = allData[id]
   row.recvAt = Date.now()
   row.recv = true
   row.delay = row.recvAt - row.sentAt
@@ -58,13 +58,26 @@ async function dcHandleMessage(msg){
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
 async function sendPackets(batchID){
+  var enc = new TextEncoder();
+
   for(let i = 0; i < batchSize; i++){
+    // encoding the data
+    // this is done to make sure that the data is the right size for the data channel
+    encodedID = enc.encode(batchID + i + " ".repeat(rangeP.value - (batchID + i).toString().length))
+
+
     dataEntry = {}
     dataEntry.id = batchID + i
     dataEntry.sentAt =  Date.now()
     dataEntry.recv = false
 
-    dataChannel.send(String(batchID + i))
+
+
+
+    dataChannel.send(encodedID)
+
+
+
     allData.push(dataEntry)
   }
 }
