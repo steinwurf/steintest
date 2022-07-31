@@ -72,3 +72,13 @@ var webSocketConnection = createWebSocketConnection(serverPickComponent.value)
 
 // The start button is clicked, the test is started
 startbutton.onclick = startTest
+
+
+// the error modal is shown when the test fails
+function OpenModal(error) {
+    document.querySelector(".overlay").style.display = "block";
+    document.querySelector(".popup").innerHTML += "<p>" +  error + "</p>";
+    }
+function CloseModal() {
+document.querySelector(".overlay").style.display = "none";
+}

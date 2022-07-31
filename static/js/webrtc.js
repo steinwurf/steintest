@@ -29,16 +29,14 @@ async function handleCandidate(data){
 async function dcHandleMessage(msg){
   // chrome and firefox have different ways of handling the message therfore we need to check for both
   
-  let chromeAgent = navigator.userAgent.indexOf("Chrome") > -1;
-
   let firefoxAgent = navigator.userAgent.indexOf("Firefox") > -1;
 
-  if(chromeAgent){
+  if(firefoxAgent){
+    decodedId = await msg.data.text()
+  }
+  else{
     var enc = new TextDecoder("utf-8")
     var decodedId = enc.decode(msg.data)
-  }
-  else if(firefoxAgent){
-    decodedId = await msg.data.text()
   }
 
   let id = decodedId.split(" ")[0]
@@ -70,9 +68,6 @@ async function sendPackets(batchID){
     dataEntry.id = batchID + i
     dataEntry.sentAt =  Date.now()
     dataEntry.recv = false
-
-
-
 
     dataChannel.send(encodedID)
 
@@ -160,6 +155,7 @@ function createWebRTCConnection(){
     dataChannel.onopen = onDataChannelOpen;
 
     dataChannel.onerror = (error) => {
+      OpenModal("Error while creating the data channel")
       console.log("Data Channel Error:", error);
     };
 

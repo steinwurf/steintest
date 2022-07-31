@@ -43,9 +43,9 @@ function createWebSocketConnection(selectedServer){
   }
 
   Connection.onerror = (error) => {
+    OpenModal("Error while connecting to server")
     console.log("Websocket error: ", error)
   }
-
   //Recving data from the server through the web socket
   Connection.onmessage = function(event){
     var data = JSON.parse(event.data)
@@ -196,7 +196,6 @@ function CreatePlots(){
 
 
 async function startTest(){
-
   ChangeStateOfComponents(true)
   
   // If the websocket is not connected, create a new one
