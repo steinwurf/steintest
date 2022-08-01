@@ -1,14 +1,13 @@
 [
     {
       "id": "BuildWebsite",
-      "execute-command": "/home/maxim/redeploy-nodejs-app.sh",
-      "command-working-directory": "/home/maxim/nodejs-app",
+      "execute-command": "/var/www/steintest/build_website/build.sh",
+      "command-working-directory": "/var/www/steintest/build_website",
       "trigger-rule": {
         "and": [
           {
             "match": {
               "type": "payload-hash-sha1",
-              "secret": "yourgithubsecret",
               "parameter": {
                 "source": "header",
                 "name": "X-Hub-Signature"
