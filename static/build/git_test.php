@@ -12,7 +12,6 @@ catch(Exception $e)
 file_put_contents('github_build_logs.txt', print_r($payload, TRUE), FILE_APPEND);
 
 
-
 /* if ($payload->ref === 'refs/heads/master')
 {
   // path to your site deployment script
