@@ -66,6 +66,7 @@ var serverPickComponent = document.getElementById("serverpick");
 serverPickComponent.oninput = function(){
     var selectedServer = serverPickComponent.value;
     webSocketConnection = createWebSocketConnection(selectedServer)
+
   }
 // the websocket is first initilized here when the site is loaded
 var webSocketConnection = createWebSocketConnection(serverPickComponent.value)

@@ -36,6 +36,7 @@ function createWebSocketConnection(selectedServer){
 
   Connection.onopen = () => {
     console.log("Succesfully connected to via websocket")
+
   }
 
   Connection.onclose = (event) => {
@@ -46,6 +47,7 @@ function createWebSocketConnection(selectedServer){
     OpenModal("Error while connecting to server")
     console.log("Websocket error: ", error)
   }
+
   //Recving data from the server through the web socket
   Connection.onmessage = function(event){
     var data = JSON.parse(event.data)
