@@ -111,12 +111,6 @@ function onIceCandidate(event) {
     }
   }
   
-  // Callback for when the SDP offer was successfully created.
-function onOfferCreated(description) {
-  console.log("offer is created and sent")
-  rtcPeerConnection.setLocalDescription(description); 
-  webSocketConnection.send(JSON.stringify({type: 'offer', payload: description}));
-}
 
 function onConnectionStateChange(event){
   console.log(event)
@@ -140,6 +134,7 @@ function createWebRTCConnection(){
     };
 
     rtcPeerConnection = new RTCPeerConnection(config);
+
     rtcPeerConnection.onicecandidate = onIceCandidate;
     rtcPeerConnection.onicecandidateerror = onIceCandidateError
 
@@ -168,6 +163,16 @@ function createWebRTCConnection(){
       },
     };
 
-    rtcPeerConnection.createOffer(onOfferCreated, () => {}, sdpConstraints);
+rtcPeerConnection.createOffer().then(function(offer) {
+  return rtcPeerConnection.setLocalDescription(offer);
+})
+.then(function() {
+  console.log("sending local sdp")
+  webSocketConnection.send(JSON.stringify({type: 'offer', payload: rtcPeerConnection.localDescription}));
+})
+.catch(function(reason) {
+  console.log("the reason:" + reason)
+  // An error occurred, so handle the failure to connect
+});
 
 }    
