@@ -114,6 +114,8 @@ func reader(client *Client, pool *Pool){
 			log.Println(err)
 			break	
 		}
+
+
 		//unmarshalling the message to a map
 		var message map[string]interface{}
 		json.Unmarshal(p, &message)
@@ -161,6 +163,7 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 	if err != nil{
 		log.Println(err)
 	}
+
 	
 	log.Println("client succesfully connected to the server")
 	go reader(&client, pool)
