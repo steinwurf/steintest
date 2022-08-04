@@ -62,8 +62,6 @@ async function sendPackets(batchID){
     // encoding the data
     // this is done to make sure that the data is the right size for the data channel
     encodedID = enc.encode(batchID + i + " ".repeat(rangeP.value - (batchID + i).toString().length))
-
-
     dataEntry = {}
     dataEntry.id = batchID + i
     dataEntry.sentAt =  Date.now()
