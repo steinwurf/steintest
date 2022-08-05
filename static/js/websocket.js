@@ -110,9 +110,6 @@ function CreatePlots(){
 
   NumberOfDelayedPackets = 0
 
-  //Something
-  IDArray = []
-
   //LostRecv Plot
   LostRecvData = {"Recieved" : 0, "Lost" : 0}
 
@@ -130,11 +127,6 @@ function CreatePlots(){
     }
     if (dataEntry.recv == false){
       LostRecvData["Lost"] ++ 
-    }
-
-    // Id gathering
-    if(dataEntry.recv == true){
-      IDArray.push(dataEntry.id)
     }
 
     // consecutive lost packets
@@ -156,6 +148,7 @@ function CreatePlots(){
   ConsLostPacketData =  GetConsLostPacketsFromarray(BinRecvPackets)
 
 // here it start
+  IDArray = range(0, DelayHistData.length - 1)
   delayFigure = {
     name: 'Delay over time',
     y: DelayHistData,
@@ -164,7 +157,7 @@ function CreatePlots(){
     marker: {},
   }
 
-  layoutDelay = {bargap: 0, title : "Delay of packets", xaxis: {title: "ID"}, yaxis: {title: "Delay"},
+  layoutDelay = {bargap: 10, title : "Delay of packets", xaxis: {title: "ID"}, yaxis: {title: "Delay"},
                 shapes: [
                   {
                       type: 'line',
@@ -221,6 +214,10 @@ async function startTest(){
     onDataChannelOpen()
   }
 
+}
+
+function range(start, end) {
+  return Array(end - start + 1).fill().map((_, idx) => start + idx)
 }
 
 // The functionality of the loading bar
