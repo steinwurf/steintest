@@ -5,10 +5,11 @@ const finishedTestEvent = new Event("finishedTestEvent")
 document.addEventListener("finishedTestEvent", e => {
 
   CreatePlots()
-
   NumberOfPackets = allData.length
 
-  PacketLossPercentage = (NumberOfPackets - LostRecvData[0]) / NumberOfPackets * 100
+  PacketLossPercentage = (NumberOfPackets - LostRecvData["Recieved"]) / NumberOfPackets * 100
+
+  ShowTextResults(PacketLossPercentage, NumberOfDelayedPackets)
 
   webSocketConnection.send(JSON.stringify({type: "packetData", payload :
   {PacketData : allData,
@@ -25,6 +26,13 @@ document.addEventListener("finishedTestEvent", e => {
   ChangeStateOfComponents(false)
 
 })
+
+function ShowTextResults(PacketLossPercentage){
+  document.getElementById("packetloss").innerHTML = " Total Packetloss: " + PacketLossPercentage.toFixed(1) + "%"
+  document.getElementById("delaypercent").innerHTML = "Delayed Packets: " + (NumberOfDelayedPackets / LostRecvData["Recieved"] * 100).toFixed(1) + "%"
+}
+
+
 
 function createWebSocketConnection(selectedServer){
   if (typeof webSocketConnection !== "undefined"){
@@ -100,22 +108,17 @@ function CreatePlots(){
   // Delay histogram 
   DelayHistData = []
 
+  NumberOfDelayedPackets = 0
+
   //Something
   IDArray = []
 
   //LostRecv Plot
-  LostRecvData = [0, 0]
-  labels = ["Recieved", "Lost"]
+  LostRecvData = {"Recieved" : 0, "Lost" : 0}
 
   //Consecutive Lost Packets Histogram
   ConsLostPacketData = []
   BinRecvPackets = []
-
-  // Layout 
-  var layout = {
-    grid: {rows: 2, columns: 2, pattern: 'independent'},
-  };
-
 
   // Gathering all the data
   for(var i = 0; i < allData.length; i++){
@@ -123,15 +126,11 @@ function CreatePlots(){
 
     // LostRecv Plot
     if (dataEntry.recv == true){
-      LostRecvData[0] ++ 
+      LostRecvData["Recieved"] ++ 
     }
     if (dataEntry.recv == false){
-      LostRecvData[1] ++ 
+      LostRecvData["Lost"] ++ 
     }
-
-    // Delay histogram data gathering
-    DelayHistData.push(dataEntry.delay)
-
 
     // Id gathering
     if(dataEntry.recv == true){
@@ -144,56 +143,70 @@ function CreatePlots(){
     }else{
       BinRecvPackets.push(0)
     }
+
+    // Delayed packets counter
+    if(dataEntry.delayed == true){
+      NumberOfDelayedPackets ++
+    }
+
+    // Delay histogram data gathering
+    DelayHistData.push(dataEntry.delay)
   }
 
   ConsLostPacketData =  GetConsLostPacketsFromarray(BinRecvPackets)
 
-  console.log(BinRecvPackets)
-  console.log(ConsLostPacketData)
-
-
-  var trace1 = {
-      name: 'Number of lost and recieved packets',
-      y: LostRecvData,
-      x: labels,
-      type: 'bar',
-    };
-
-  var trace2 = {
-    name: "Histogram of delays",
-    x: DelayHistData,
-    type: "histogram",
-    xaxis: 'x2',
-    yaxis: 'y2',
-  }
-
-  var trace3 = {
+// here it start
+  delayFigure = {
     name: 'Delay over time',
     y: DelayHistData,
     x: IDArray,
-    marker: {},
     type: "bar",
-    xaxis: 'x3',
-    yaxis: 'y3',
+    marker: {},
   }
 
-  trace3.marker.color = trace3.y.map(function (v) {
-    return v < rangeA.value ? '#009CFF' : 'white'
-  });
+  layoutDelay = {bargap: 0, title : "Delay of packets", xaxis: {title: "ID"}, yaxis: {title: "Delay"},
+                shapes: [
+                  {
+                      type: 'line',
+                      xref: 'paper',
+                      x0: 0,
+                      y0: rangeA.value,
+                      x1: 1,
+                      y1: rangeA.value,
+                      line:{
+                          color: 'rgb(255, 0, 0)',
+                          width: 1,
+                      }
+                  }
+                ],
+                margin: {
+                  l: 40,
+                  r: 40,
+                  b: 50,
+                  t: 40,
+                  pad: 0
+                },        
+}
 
+  Plotly.newPlot("firstplot", [delayFigure], layoutDelay, {displayModeBar: false})
 
-
-  var trace4 = {
+  consFigure = {
     name: "Histogram of consecutive lost packet",
     x: ConsLostPacketData,
     type: "histogram",
-    xaxis: 'x4',
-    yaxis: 'y4',
-    nbinsx: 10
   }
 
-  var data = [trace1, trace2, trace3, trace4];
-  Plotly.newPlot('plotdiv', data, layout);
+  consLayout = {title: "Histogram of consecutive lost packets", xaxis: {title: "Number of consecutive lost packets"}, yaxis: {title: "Count"},
+                margin: {
+                  l: 40,
+                  r: 40,
+                  b: 50,
+                  t: 40,
+                  pad: 0
+                },  
+  }
+  Plotly.newPlot("secondplot", [consFigure], consLayout, {displayModeBar: false})
+// here it ends
 }
 
 

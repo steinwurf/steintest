@@ -123,7 +123,7 @@ func reader(client *Client, pool *Pool){
 		switch message["type"]{
 
 		case "offer":
-			var offerMsg offerMsg	
+			var offerMsg offerMsg
 			json.Unmarshal(p, &offerMsg)
 
 			handleOffer(offerMsg, client.SocketConn, messageType, client.WebrtcConn)
