@@ -15,4 +15,4 @@
 # vendor/
 *.venv
 
-backend/src/ServerInfo.go
+Steintest/backend/src/ServerInfo.go
