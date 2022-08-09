@@ -15,4 +15,4 @@
 # vendor/
 *.venv
 
-
+ServerInfo.go
