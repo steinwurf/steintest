@@ -78,7 +78,7 @@ startbutton.onclick = startTest
 // the error modal is shown when the test fails
 function OpenModal(error) {
     document.querySelector(".overlay").style.display = "block";
-    document.querySelector(".popup").innerHTML += "<p>" +  error + "</p>";
+    document.querySelector(".popup").innerHTML += "<p>" +  "Try reloading the page" + "</p>";
     }
 function CloseModal() {
 document.querySelector(".overlay").style.display = "none";
