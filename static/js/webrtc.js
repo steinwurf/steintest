@@ -148,7 +148,7 @@ function createWebRTCConnection(){
     dataChannel.onopen = onDataChannelOpen;
 
     dataChannel.onerror = (error) => {
-      OpenModal("Error while creating the data channel")
+      OpenModal("Error while creating the data channel (datachannel)")
       console.log("Data Channel Error:", error);
     };
 

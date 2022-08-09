@@ -52,7 +52,7 @@ function createWebSocketConnection(selectedServer){
   }
 
   Connection.onerror = (error) => {
-    OpenModal("Error while connecting to server")
+    OpenModal("Error while connecting to server (onerror)")
     console.log("Websocket error: ", error)
   }
 
