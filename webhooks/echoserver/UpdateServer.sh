@@ -2,5 +2,5 @@
 tmux
 git pull 
 kill $(lsof -t -i:8080)
-go run main.go
+sh genstartServer.sh
 tmux detach
