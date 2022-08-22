@@ -1,0 +1,24 @@
+[
+  {
+    "id": "echoserver",
+    "execute-command": "/root/steintest/webhooks/echoserver/UpdateServer.sh",
+    "command-working-directory": "/root/steintest/backend", 
+    "trigger-rule": {
+      "and":
+      [
+        {
+          "match":
+          {
+            "type": "value",
+            "value": "refs/heads/master",
+            "parameter":
+            {
+              "source": "payload",
+              "name": "ref"
+            }
+          }
+        }
+      ]
+    }
+}
+]
