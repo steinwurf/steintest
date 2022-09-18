@@ -1,0 +1,9 @@
+pymongo~=4.2.0
+plotly~=5.9.0
+pandas~=1.4.4
+geopy~=2.2.0
+pymongo[srv]~=4.2.0
+seaborn~=.12.0
+scipy~=1.9.1
+fpdf~=1.7.2
+kaleido~=0.2.1
