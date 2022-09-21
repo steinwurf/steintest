@@ -2,7 +2,10 @@
 A packet loss measuring tool, measuring packet loss over webrtc connections.   
 
 # Usage
- *WIP
+This repository contains the code for running packloss tests over a webrtc connection. Visit website "steintest.steinwurf.com" if one wnats to test their connection to different servers.
+
+If you want to run the program locally, you first need to start the server by running "main.go" it will start a server listening to the port 8080. 
+Connecting to the server can happen through the GUI. To start the GIU run "index.html".
  
 # Developer
 ## Adding a new server 

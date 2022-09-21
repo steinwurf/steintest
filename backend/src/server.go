@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
 	"github.com/gorilla/websocket"
 	"github.com/pion/webrtc/v3"
 	"github.com/rs/xid"
@@ -13,6 +12,7 @@ import (
 	"strings"
 	"go.mongodb.org/mongo-driver/mongo"
 )
+
 type Client struct{
 	ID string
 	SocketConn *websocket.Conn
@@ -147,6 +147,8 @@ func reader(client *Client, pool *Pool){
 
 
 func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
+
+
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true}
 
 	client := Client{
@@ -158,15 +160,21 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 	
 	pool.Clients[&client] = true
 
+
 	var err error
 	client.SocketConn, err = upgrader.Upgrade(w,r, nil)
 	if err != nil{
-		log.Println(err)
+		delete(pool.Clients, &client)
+		panic(err)
 	}
 
 	
 	log.Println("client succesfully connected to the server")
 	go reader(&client, pool)
+
+	defer func(){
+		fmt.Printf("client with id  %s has now left. %d users still connected \n", client.ID, len(pool.Clients))
+	}()
 
 }
 
