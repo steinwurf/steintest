@@ -43,45 +43,10 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-func reader(client *Client, pool *Pool){
 
-	client.DBClient = ConnectToDB()
-	fmt.Println("succesfully connected to db")
-
-	defer func(){
-		delete(pool.Clients, client)
-		client.SocketConn.Close()
-		fmt.Printf("client with id  %s has now left. %d users still connected \n", client.ID, len(pool.Clients))
-	}()
-	
-	defer func() {
-        if r := recover(); r != nil {
-            fmt.Println("Recovered. Error:\n", r)
-        }
-    }()
-	
-	config := webrtc.Configuration{
-		ICEServers: []webrtc.ICEServer{
-			{
-				URLs: []string{"stun:stun1.l.google.com:19302"},
-			},
-			{
-				URLs: []string{"turn:142.93.235.90:3478"},
-				Username: "test",
-				Credential: "test123",
-			},
-		},
-	}
-
-	var err error
-	client.WebrtcConn, err = webrtc.NewPeerConnection(config)
-	if err != nil {
-		panic(err)
-	}
-
-	// event handler for icecandidates
+func setEventListeners(client *Client){
 	client.WebrtcConn.OnICECandidate(func(candidate *webrtc.ICECandidate) {
-			handleICECandidates(candidate, *client)
+		handleICECandidates(candidate, *client)
 	})
 
 	client.WebrtcConn.OnDataChannel(func(dc *webrtc.DataChannel) {
@@ -107,8 +72,49 @@ func reader(client *Client, pool *Pool){
 	client.WebrtcConn.OnSignalingStateChange(func (state webrtc.SignalingState)  {
 		onSignalingStateChange(state)
 	})
+}
+
+func reader(client *Client, pool *Pool){
+
+	client.DBClient = ConnectToDB()
+	fmt.Println("succesfully connected to db")
+
+	defer func(){
+		delete(pool.Clients, client)
+		client.SocketConn.Close()
+		fmt.Printf("client with id  %s has now left. %d users still connected \n", client.ID, len(pool.Clients))
+	}()
+	
+	defer func() {
+        if r := recover(); r != nil {
+            fmt.Println("Recovered. Error:\n", r)
+        }
+    }()
+	
+	
+	config := webrtc.Configuration{
+		ICEServers: []webrtc.ICEServer{
+			{
+				URLs: []string{"stun:stun1.l.google.com:19302"},
+			},
+			{
+				URLs: []string{"turn:142.93.235.90:3478"},
+				Username: "test",
+				Credential: "test123",
+			},
+		},
+	}
+
+	var err error
+	client.WebrtcConn, err = webrtc.NewPeerConnection(config)
+	if err != nil {
+		panic(err)
+	}
+
+	setEventListeners(client)
 
 	for {
+		// Read in a new message
 		messageType, p, err := client.SocketConn.ReadMessage()
 		if err != nil {
 			log.Println(err)
@@ -145,17 +151,14 @@ func reader(client *Client, pool *Pool){
 	}
 }
 
-
+// The websocket endpoint
 func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
-
-
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true}
 
 	client := Client{
-		ID: xid.New().String(),
-		// This line removes the port number from the ip
-		IP: strings.Split(r.RemoteAddr, ":")[0],
-		UserAgent: r.UserAgent(),
+		ID: xid.New().String(), //Generating a random id for the client
+		IP: strings.Split(r.RemoteAddr, ":")[0], // This line removes the port number from the ip
+		UserAgent: r.UserAgent(), //Getting the user agent
 	}
 	
 	pool.Clients[&client] = true

@@ -5,10 +5,13 @@ import numpy as np
 import plotly.express as px
 from pathlib import Path
 from datetime import datetime
-import dataprocessing.queries as q
 from scipy import stats
 import plotly.graph_objects as go
 
+try: 
+    import dataprocessing.queries as q
+except:
+    import queries as q
 
 TODAY = datetime.utcnow().strftime('%Y-%m-%d')
 HISTORICAL_DATA_PATH = Path(__file__).resolve().parents[1] / "historical_data" / "historical_data.csv"
@@ -304,6 +307,34 @@ def scatterplot_of_speed_and_packetloss():
     )
     return fig
 
+def morten_plot():
+    result_df = pd.DataFrame(columns=['x', 'lossless'])
+
+
+
+    df = q.morten()
+    for i in range(11):
+        lossless = len(df[df['MaxConsLostPackets'] <= i])
+        result_df = result_df.append({'x': i, 'lossless': lossless}, ignore_index=True)
+
+
+    result_df['lossless'] = result_df['lossless'] / len(df) * 100
+
+
+    fig = px.line(result_df, x='x', y='lossless', color_discrete_sequence=COLORS)
+    fig.update_layout(xaxis_range=[-0,10])
+
+    """ fig = go.Figure(data=[go.Pie(labels=['Lossless', 'Lossy'], values=[lossless, lossy])]) """
+
+
+
+    """ fig = px.ecdf(df, x="MaxConsLostPackets", ecdfmode="reversed")
+    fig.update_layout(yaxis_range=[0,1],
+                      xaxis_range=[0,4])   
+ """
+
+    fig.show()
+
 
 
 
@@ -313,7 +344,7 @@ def generate_plots():
 
     historical_df = load_historical_data()
 
-    all_plots["tests_over_time"] = tests_over_time()
+    """     all_plots["tests_over_time"] = tests_over_time()
     all_plots["consecutive_lost_packets_histogram"] = consecutive_lost_packets_histogram(historical_df)
     all_plots["tests_over_time_per_server"] = tests_over_time_per_server()
     all_plots["tests_over_time_per_continent"] = tests_over_time_per_continent()
@@ -321,7 +352,10 @@ def generate_plots():
     all_plots["box_plots_over_OS"] = box_plots_over_OS()
     all_plots["scatter_plot_of_speed_and_packetloss"] = scatterplot_of_speed_and_packetloss()
     all_plots["scatter_plot_of_packetloss_and_latency"] = scatter_plot_of_packetloss_and_latency()
-    all_plots["box_plots_of_packetloss_per_continent"] = box_plots_of_packetloss_per_continent()
+    all_plots["box_plots_of_packetloss_per_continent"] = box_plots_of_packetloss_per_continent() """
+
+    all_plots["test"] = morten_plot()
+
     export_all_plots(all_plots)
 
 

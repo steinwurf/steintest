@@ -3,7 +3,6 @@ package src
 import (
 	"encoding/json"
 	"fmt"
-
 	"github.com/gorilla/websocket"
 	"github.com/pion/webrtc/v3"
 )
@@ -40,6 +39,8 @@ type iceCandidate struct{
 	Candidate webrtc.ICECandidateInit `json:"candidate"` 
 }
 
+
+// Handles the offer from the client
 func handleOffer (offerMsg offerMsg, webconn *websocket.Conn, msg_type int, pc *webrtc.PeerConnection){
 
 	sdp_type := webrtc.NewSDPType(offerMsg.Payload.Type)
@@ -64,13 +65,9 @@ func handleOffer (offerMsg offerMsg, webconn *websocket.Conn, msg_type int, pc *
 	webconn.WriteMessage(msg_type, u)
 }
 
+// Handles the candidate from the client
 func handleICECandidates(candidate *webrtc.ICECandidate, client Client){
 	if candidate != nil{
-
-/* 		u, err := json.Marshal(iceCandidate{Type: "candidate", Candidate: *candidate})
-		if err != nil {
-			panic(err)
-		} */
 
 		object, err := json.Marshal(iceCandidate{Type:"candidate", Candidate:  candidate.ToJSON()})
 		if err != nil {
@@ -80,10 +77,12 @@ func handleICECandidates(candidate *webrtc.ICECandidate, client Client){
 	}
 }
 
+// Handles the messages sent through the datachannel from the client
 func handleMessageDataChannel(msg webrtc.DataChannelMessage, client Client, channel *webrtc.DataChannel ){
 	channel.Send(msg.Data)
 }
 
+// handles when the data channel is opened
 func handleOpenDataChannel(channel *webrtc.DataChannel, client Client){
 	channel.OnMessage(func(msg webrtc.DataChannelMessage) {
 		handleMessageDataChannel(msg, client, channel)
@@ -91,6 +90,7 @@ func handleOpenDataChannel(channel *webrtc.DataChannel, client Client){
 )
 }
 
+// only for debugging purposes
 func  onConnectionStateChange(state webrtc.PeerConnectionState){
 	fmt.Println("PeerConnectionState is ", state)
 }

@@ -381,3 +381,25 @@ def get_tests_packetloss_and_continent():
     result =  list(query_result)
     df = pd.DataFrame.from_records(result)
     return df 
+
+def morten():
+    query_result = client['steintest']['sessiondata'].aggregate([
+    {
+        '$match': {
+            'TimeStamp': {
+                '$gt': 0
+            }
+        }
+    }, {
+        '$project': {
+            '_id': 0, 
+            'MaxConsLostPackets': {
+                '$max': '$ConsLostPacketData'
+            }
+        }
+    }
+    ])
+
+    df = pd.DataFrame.from_records(list(query_result))
+    df.fillna(0, inplace=True)
+    return df

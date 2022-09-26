@@ -139,9 +139,6 @@ func InsertData(data []byte, client *Client){
     }
 }
 
-
-
-
 func ParseUA(UserAgentString string) UserAgent{
 
 	ParsedObject := ua.Parse(UserAgentString)
