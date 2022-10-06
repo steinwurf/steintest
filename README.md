@@ -6,7 +6,11 @@ This repository contains the code for running packloss tests over a webrtc conne
 
 If you want to run the program locally, you first need to start the server by running "main.go" it will start a server listening to the port 8080. 
 Connecting to the server can happen through the GUI. To start the GIU run "index.html".
- 
+
+# Documentation
+The documentation now is not greate but the overall logic will be added to the issue called documentation
+
+
 # Developer
 ## Adding a new server 
 * Create a Digital ocean droplet
