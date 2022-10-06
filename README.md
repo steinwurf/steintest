@@ -8,7 +8,7 @@ If you want to run the program locally, you first need to start the server by ru
 Connecting to the server can happen through the GUI. To start the GIU run "index.html".
 
 # Documentation
-The documentation now is not greate but the overall logic will be added to the issue called documentation
+The documentation now is limited but the overall logic will be added to the issue called documentation
 
 
 # Developer
