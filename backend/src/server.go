@@ -184,6 +184,7 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 
 func setupRoutes() {
 	server := Server{Pool: NewPool(), Mutex: sync.Mutex{}}
+	
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		wsEndpoint(server.Pool, w, r)
 	})

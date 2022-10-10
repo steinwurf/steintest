@@ -1,9 +1,13 @@
 import pandas as pd 
 import numpy as np
-import generatereports.report_settings as rs
 import fpdf
 from pathlib import Path
 from datetime import datetime, timedelta
+try:
+    import generatereports.report_settings as rs
+except ImportError:
+    import report_settings as rs
+
 
 ## Important this file must not be run alone it must be run after generate_historical_data.py
 

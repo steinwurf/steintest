@@ -307,36 +307,42 @@ def scatterplot_of_speed_and_packetloss():
     )
     return fig
 
-def morten_plot():
-    result_df = pd.DataFrame(columns=['x', 'lossless'])
+def cdf_over_number_of_lost_packets():
+    df = q.get_number_of_lost_packets_per_test()
+
+    range_of_y = 20
+    cdf_df = pd.DataFrame(columns=['x', 'Less than x', 'Greater than x'])
 
 
 
-    df = q.morten()
-    for i in range(11):
-        lossless = len(df[df['MaxConsLostPackets'] <= i])
-        result_df = result_df.append({'x': i, 'lossless': lossless}, ignore_index=True)
+    for i in range(range_of_y):
+        less_than_x = len(df[df["number_of_lost_packets"] <= i]) / len(df) * 100
+        greater_than_x = len(df[df["number_of_lost_packets"] > i]) / len(df) * 100
 
-
-    result_df['lossless'] = result_df['lossless'] / len(df) * 100
-
-
-    fig = px.line(result_df, x='x', y='lossless', color_discrete_sequence=COLORS)
-    fig.update_layout(xaxis_range=[-0,10])
-
-    """ fig = go.Figure(data=[go.Pie(labels=['Lossless', 'Lossy'], values=[lossless, lossy])]) """
+        cdf_df = cdf_df.append({'x': i, 'Less than x': less_than_x, "Greater than x": greater_than_x}, ignore_index=True)
 
 
 
-    """ fig = px.ecdf(df, x="MaxConsLostPackets", ecdfmode="reversed")
-    fig.update_layout(yaxis_range=[0,1],
-                      xaxis_range=[0,4])   
- """
+    fig = px.bar(cdf_df, x="x", y=["Less than x", "Greater than x"], barmode="stack", color_discrete_sequence=COLORS)
 
-    fig.show()
+    fig.update_layout(
+        bargap=0,
+        title="CDF of number of lost packets",
+        xaxis_title="Number of lost packets",
+        yaxis_title="Percentage (%)",
+        font=dict(
+            family="Times, monospace",
+            size=18,
+            color="#000000"
+        ),
+        template="seaborn",
+        yaxis_range=[0, 100]
+        
+    )
+    fig.update_traces(marker_line_width=0)
 
 
-
+    return fig
 
 
 def generate_plots():
@@ -344,7 +350,7 @@ def generate_plots():
 
     historical_df = load_historical_data()
 
-    """     all_plots["tests_over_time"] = tests_over_time()
+    all_plots["tests_over_time"] = tests_over_time()
     all_plots["consecutive_lost_packets_histogram"] = consecutive_lost_packets_histogram(historical_df)
     all_plots["tests_over_time_per_server"] = tests_over_time_per_server()
     all_plots["tests_over_time_per_continent"] = tests_over_time_per_continent()
@@ -352,9 +358,8 @@ def generate_plots():
     all_plots["box_plots_over_OS"] = box_plots_over_OS()
     all_plots["scatter_plot_of_speed_and_packetloss"] = scatterplot_of_speed_and_packetloss()
     all_plots["scatter_plot_of_packetloss_and_latency"] = scatter_plot_of_packetloss_and_latency()
-    all_plots["box_plots_of_packetloss_per_continent"] = box_plots_of_packetloss_per_continent() """
-
-    all_plots["test"] = morten_plot()
+    all_plots["box_plots_of_packetloss_per_continent"] = box_plots_of_packetloss_per_continent()
+    all_plots["cdf_over_number_of_lost_packets"] = cdf_over_number_of_lost_packets()
 
     export_all_plots(all_plots)
 

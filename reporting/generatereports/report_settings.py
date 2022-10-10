@@ -103,6 +103,11 @@ class PDF(fpdf.FPDF):
         self.image(str(PLOT_FOLDER_PATH / "scatter_plot_of_packetloss_and_latency.png"), self.FIRST_COLUMN_X, 200, self.COLUMN_WIDTH)
 
         self.image(str(PLOT_FOLDER_PATH / "scatter_plot_of_speed_and_packetloss.png"), self.SECOND_COLUMN_X, 200, self.COLUMN_WIDTH)
+        
+        
+        self.add_page()
+        self.image(str(PLOT_FOLDER_PATH / "cdf_over_number_of_lost_packets.png"), self.FIRST_COLUMN_X, 20, self.COLUMN_WIDTH)
+
 
     def Appendix(self):
         self.add_page()
