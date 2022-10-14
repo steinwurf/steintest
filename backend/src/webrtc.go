@@ -16,10 +16,9 @@ type sdpPayload struct {
 type offerMsg struct{
 	Type string `json:"type"`
 	Payload sdpPayload `json:"Payload"`
-
 }
 
-type offerPayLoad struct {
+type candidatePayLoad struct {
 	Candidate string `json:"candidate"`
 	SdpMid *string `json:"sdpMid"`
 	SdpMLineIndex *uint16 `json:"sdpMLineIndex"`
@@ -27,7 +26,7 @@ type offerPayLoad struct {
 
 type candidateMsg struct {
 	Type string `json:"type"`
-	Payload offerPayLoad `json:"Payload"`
+	Payload candidatePayLoad `json:"Payload"`
 }
 
 type webSocketConnection struct{
@@ -43,7 +42,9 @@ type iceCandidate struct{
 // Handles the offer from the client
 func handleOffer (offerMsg offerMsg, webconn *websocket.Conn, msg_type int, pc *webrtc.PeerConnection){
 
+
 	sdp_type := webrtc.NewSDPType(offerMsg.Payload.Type)
+	
 	remote := webrtc.SessionDescription{Type: sdp_type, SDP: offerMsg.Payload.Sdp}
 
 
@@ -65,7 +66,7 @@ func handleOffer (offerMsg offerMsg, webconn *websocket.Conn, msg_type int, pc *
 	webconn.WriteMessage(msg_type, u)
 }
 
-// Handles the candidate from the client
+// Handles the candidate from the server
 func handleICECandidates(candidate *webrtc.ICECandidate, client Client){
 	if candidate != nil{
 

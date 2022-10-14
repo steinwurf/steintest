@@ -29,7 +29,6 @@ This function is the go routine running through out the connection.
 
 
 
-
 ## webrtc.go
 WIP
 

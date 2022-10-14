@@ -28,7 +28,6 @@ This function is the go routine running through out the connection.
 - Reading messages over the websocket, and calling the correct messages depending on the websocket      messages.
 
 
-`Client{}`  
 
 
 ## webrtc.go
