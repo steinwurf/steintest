@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/pion/webrtc/v3"
 	"time"
+	"os"
 )
 type client struct {
 	Webconn *websocket.Conn
@@ -69,6 +70,7 @@ func Run(destinationParameters destinationParameters, testParameters testParamet
 }
 
 func deferfunc (client client){
+	fmt.Println("Closing connections")
 	client.Webconn.Close()
 	client.Pc.Close()
 }
@@ -80,7 +82,8 @@ func connectWebSocket(ip string, port string) *websocket.Conn {
 	conn, _, err := websocket.DefaultDialer.Dial("ws://" + ip + ":" + port, nil)
 	if err != nil {
 		fmt.Println("Failed to connect to websocket")
-		panic(err)
+		fmt.Println("Make sure that the backend is running and listening on the correct addres eg.", ip, ":", port)
+		os.Exit(0)
 	}
 	fmt.Println("Connected to websocket")
 

@@ -76,7 +76,9 @@ func recvData(msg webrtc.DataChannelMessage, client client){
 	}
 }
 
-func exportData(client client){
+func exportData(client client){	
+	// export the data
+	
 	fmt.Println("Exporting data")
 	
 	file, _ := json.MarshalIndent(client.TestData, "", " ")

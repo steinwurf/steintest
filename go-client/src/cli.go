@@ -22,7 +22,7 @@ func Cli() (destinationParameters, testParameters) {
 	PacketSize := flag.Int("PacketSize", 1024, "the size of the packet")
 	Duration := flag.Int("Duration", 10, "the duration of the test in seconds")
 	PacketsPerSecond := flag.Int("PacketsPerSecond", 150, "the frequency of the packets per seconds")
-	FilePath := flag.String("FilePath", "TestData.json", "the path to the file to be sent")
+	FilePath := flag.String("FilePath", "logs/TestData.json", "the path to the file to be sent")
 
 	flag.Parse()
 
