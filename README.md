@@ -11,8 +11,6 @@ WIP :construction_worker: :construction_worker: :construction_worker:
 
 
 
-
-
 ## GO BINARIES
 The package is developed in go version 1.18.1. 
 
