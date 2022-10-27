@@ -1,6 +1,6 @@
 [
   {
-    "id": "echoserver",
+    "id": "backend",
     "execute-command": "/root/steintest/webhooks/backend/UpdateServer.sh",
     "command-working-directory": "/root/steintest/backend", 
     "trigger-rule": {
