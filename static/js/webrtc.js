@@ -51,7 +51,6 @@ async function dcHandleMessage(msg){
   else{
     row.delayed = true
   }
-  console.log(row)
 }
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
@@ -67,7 +66,10 @@ async function sendPackets(batchID){
     dataEntry.id = batchID + i
     dataEntry.sent_at =  Date.now()
     dataEntry.received = false
+    dataEntry.delayed = false
+    
 
+    console.log(dataEntry)
     dataChannel.send(encodedID)
 
     allData.push(dataEntry)
