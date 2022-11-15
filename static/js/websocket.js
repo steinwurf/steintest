@@ -12,15 +12,14 @@ document.addEventListener("finishedTestEvent", e => {
   ShowTextResults(PacketLossPercentage, NumberOfDelayedPackets)
 
   webSocketConnection.send(JSON.stringify({type: "packetData", payload :
-  {PacketData : allData,
-  "PacketLossPercentage": PacketLossPercentage,
-  "NumberOfPackets": NumberOfPackets,
-  "ConsLostPacketData": ConsLostPacketData,
-  "Frequency" : parseInt(rangeF.value),
-  "Duration" : parseInt(rangeD.value),
-  "AcceptableDelay" : parseInt(rangeA.value),
-  "PacketSize" : parseInt(rangeP.value),
-  "TimeStamp" : new Date().getTime()
+  {raw_data : allData,
+    meta_data : {
+      "frequency" : parseInt(rangeF.value),
+      "duration" : parseInt(rangeD.value),
+      "acceptable_delay" : parseInt(rangeA.value),
+      "packet_size" : parseInt(rangeP.value),
+      "epoch" : new Date().getTime()
+    }
   ,}}))
   
   ChangeStateOfComponents(false)
@@ -122,10 +121,10 @@ function CreatePlots(){
     dataEntry = allData[i]
 
     // LostRecv Plot
-    if (dataEntry.recv == true){
+    if (dataEntry.received == true){
       LostRecvData["Recieved"] ++ 
     }
-    if (dataEntry.recv == false){
+    if (dataEntry.received == false){
       LostRecvData["Lost"] ++ 
     }
 
@@ -142,7 +141,7 @@ function CreatePlots(){
     }
 
     // Delay histogram data gathering
-    DelayHistData.push(dataEntry.delay)
+    DelayHistData.push(dataEntry.latency)
   }
 
   ConsLostPacketData =  GetConsLostPacketsFromarray(BinRecvPackets)

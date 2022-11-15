@@ -41,16 +41,17 @@ async function dcHandleMessage(msg){
 
   let id = decodedId.split(" ")[0]
   var row = allData[id]
-  row.recvAt = Date.now()
-  row.recv = true
-  row.delay = row.recvAt - row.sentAt
+  row.recv_at = Date.now()
+  row.received = true
+  row.latency = row.recv_at - row.sent_at
 
-  if (row.delay <= rangeA.value){
+  if (row.latency <= rangeA.value){
     row.delayed = false
   }
   else{
     row.delayed = true
   }
+  console.log(row)
 }
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
@@ -64,12 +65,10 @@ async function sendPackets(batchID){
     encodedID = enc.encode(batchID + i + " ".repeat(rangeP.value - (batchID + i).toString().length))
     dataEntry = {}
     dataEntry.id = batchID + i
-    dataEntry.sentAt =  Date.now()
-    dataEntry.recv = false
+    dataEntry.sent_at =  Date.now()
+    dataEntry.received = false
 
     dataChannel.send(encodedID)
-
-
 
     allData.push(dataEntry)
   }
