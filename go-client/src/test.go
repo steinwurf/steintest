@@ -32,6 +32,11 @@ type testData struct {
 	TestDataArray []packet `json:"testDataArray"`
 }
 
+type testDataMsg struct {
+	TestData testData `json:"packetData"`
+}
+
+
 
 func startTest(dc *webrtc.DataChannel, testParameters testParameters, client client){
 	fmt.Println("Starting test")
@@ -58,7 +63,9 @@ func startTest(dc *webrtc.DataChannel, testParameters testParameters, client cli
 	fmt.Println("Test finished")
 	
 	// export the data
-	exportData(client)
+	writeDataToFile(client)
+
+	client.Webconn.WriteJSON(testDataMsg{TestData: *client.TestData})
 
 	os.Exit(0)
 }
@@ -76,7 +83,7 @@ func recvData(msg webrtc.DataChannelMessage, client client){
 	}
 }
 
-func exportData(client client){	
+func writeDataToFile(client client){	
 	// export the data
 	
 	fmt.Println("Exporting data")

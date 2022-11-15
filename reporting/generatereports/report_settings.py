@@ -46,8 +46,7 @@ class PDF(fpdf.FPDF):
         self.set_font('Times', 'B', 16)
         self.ln(20)
         self.cell(0, 100, last_report_date.strftime("%m/%d/%Y") + " - " + today_date.strftime("%m/%d/%Y"), align='C')
-
-        self.image(str(self.ASSETS / 'frontpage-picture.png'), self.WIDTH / 2 - 70, self.HEIGHT / 2 - 40, 140)
+        #self.image(str(self.ASSETS / 'frontpage-picture.png'), self.WIDTH / 2 - 70, self.HEIGHT / 2 - 40, 140)
 
     def quick_overview(self, num_tests_since_last_report, deviation_in_num_tests, nums_of_test_singapore, nums_of_test_new_york, nums_of_test_amsterdam, PLOT_FOLDER_PATH):
         self.add_page()
@@ -67,46 +66,96 @@ class PDF(fpdf.FPDF):
         self.multi_cell(80, 10, f"Amsterdam:  {str(nums_of_test_amsterdam)}\nNew York:  {str(nums_of_test_new_york)}\nSingapore:  {str(nums_of_test_singapore)}", 
                                     0, 0, 'L')
 
-        consecutive_lost_packets_histogram = PLOT_FOLDER_PATH / "consecutive_lost_packets_histogram.png"
+                
+        self.image(str(PLOT_FOLDER_PATH / "tests_over_time_per_server.png"), self.SECOND_COLUMN_X, 40, self.COLUMN_WIDTH)
+        
+        self.image(str(PLOT_FOLDER_PATH / "tests_over_time.png"), self.SECOND_COLUMN_X, 120, self.COLUMN_WIDTH)
 
-        self.image(str(consecutive_lost_packets_histogram), self.FIRST_COLUMN_X, None, self.COLUMN_WIDTH)
+        
 
     def geographical_coverage(self, PLOT_FOLDER_PATH):
         self.add_page()
         self.set_font('Arial', 'B', 16)
         self.cell(0, 10, 'Geographical coverage', 0, 0, 'C')
+ 
         self.ln(20)
+    
+        self.set_font('Times', '', 12)
 
-        self.image(str(PLOT_FOLDER_PATH / "box_plots_of_packetloss_per_continent.png"), self.FIRST_COLUMN_X, 40, self.COLUMN_WIDTH)
+
+        ## Insert text here
+        self.multi_cell(
+            w=self.COLUMN_WIDTH,
+            h=10,
+            txt= "This section will cover how geographical location impacts a connection"
+        )
         
-        self.image(str(PLOT_FOLDER_PATH / "scatter_plot_of_distance_to_server_and_packetloss.png"), self.SECOND_COLUMN_X, 40, self.COLUMN_WIDTH)
+
+        self.image(str(PLOT_FOLDER_PATH / "box_plots_of_packetloss_per_continent.png"), self.SECOND_COLUMN_X, 40, self.COLUMN_WIDTH)
+        
+        self.image(str(PLOT_FOLDER_PATH / "scatter_plot_of_distance_to_server_and_packetloss.png"), self.SECOND_COLUMN_X, 120, self.COLUMN_WIDTH)
+
+        self.image(str(PLOT_FOLDER_PATH / "tests_over_time_per_continent.png"), self.SECOND_COLUMN_X, 200, self.COLUMN_WIDTH)
 
     def all_time_overview(self, PLOT_FOLDER_PATH):
         self.add_page()
         self.set_font('Arial', 'B', 16)
         self.cell(0, 10, 'All time overview', 0, 0, 'C')
-        
-        tests_over_time_per_continent = PLOT_FOLDER_PATH / "tests_over_time_per_continent.png"
-        self.image(str(tests_over_time_per_continent), self.FIRST_COLUMN_X, 40, self.COLUMN_WIDTH)
 
 
 
-        tests_over_time_per_server = PLOT_FOLDER_PATH / "tests_over_time_per_server.png"
-        self.image(str(tests_over_time_per_server), self.SECOND_COLUMN_X, 40, self.COLUMN_WIDTH)
-        
-
-        tests_over_time = PLOT_FOLDER_PATH / "tests_over_time.png"
-        self.image(str(tests_over_time), self.FIRST_COLUMN_X, 120, self.COLUMN_WIDTH)
-
-        self.image(str(PLOT_FOLDER_PATH / "box_plots_over_OS.png"), self.SECOND_COLUMN_X, 120, self.COLUMN_WIDTH)
-
-        self.image(str(PLOT_FOLDER_PATH / "scatter_plot_of_packetloss_and_latency.png"), self.FIRST_COLUMN_X, 200, self.COLUMN_WIDTH)
-
-        self.image(str(PLOT_FOLDER_PATH / "scatter_plot_of_speed_and_packetloss.png"), self.SECOND_COLUMN_X, 200, self.COLUMN_WIDTH)
         
         
         self.add_page()
         self.image(str(PLOT_FOLDER_PATH / "cdf_over_number_of_lost_packets.png"), self.FIRST_COLUMN_X, 20, self.COLUMN_WIDTH)
+
+    def os_and_browser_section(self, PLOT_FOLDER_PATH):
+        self.add_page()
+        self.set_font('Arial', 'B', 16)
+        self.cell(0, 10, 'OS and Browser investigation', 0, 0, 'C')
+        self.ln(20)
+
+        self.set_font('Times', '', 12)
+        ## Insert text here
+        self.multi_cell(
+            w=self.COLUMN_WIDTH,
+            h=10,
+            txt= "This section will cover how os and browser impacts a connection"
+        )
+
+        self.image(str(PLOT_FOLDER_PATH / "box_plots_over_OS.png"), self.SECOND_COLUMN_X, 40, self.COLUMN_WIDTH)
+
+    def burstyness_section(self, PLOT_FOLDER_PATH):
+        self.add_page()
+        self.set_font('Arial', 'B', 16)
+        self.cell(0, 10, 'Investigation of bursty peacketloss', 0, 0, 'C')
+        self.ln(20)
+
+        self.set_font('Times', '', 12)
+        ## Insert text here
+        self.multi_cell(
+            w=self.COLUMN_WIDTH,
+            h=10,
+            txt= "This section will cover how bursty packetloss impacts a connection"
+        )
+
+        self.image(str(PLOT_FOLDER_PATH / "consecutive_lost_packets_histogram.png"), self.FIRST_COLUMN_X, None, self.COLUMN_WIDTH)
+
+    def general_plots(self, PLOT_FOLDER_PATH):
+        self.add_page()
+        self.set_font('Arial', 'B', 16)
+        self.cell(0, 10, 'General plots', 0, 0, 'C')
+
+        self.image(str(PLOT_FOLDER_PATH / "scatter_plot_of_packetloss_and_latency.png"), self.SECOND_COLUMN_X, 40, self.COLUMN_WIDTH)
+
+        self.image(str(PLOT_FOLDER_PATH / "scatter_plot_of_speed_and_packetloss.png"), self.SECOND_COLUMN_X, 120, self.COLUMN_WIDTH)
+
+        self.image(str(PLOT_FOLDER_PATH / "cdf_over_number_of_lost_packets.png"), self.SECOND_COLUMN_X, 200, self.COLUMN_WIDTH)
+
+    def stat_section(self, PLOT_FOLDER_PATH):
+        self.add_page()
+        self.set_font('Arial', 'B', 16)
+        self.cell(0, 10, 'The Statistical investigation of the data', 0, 0, 'C')
 
 
     def Appendix(self):

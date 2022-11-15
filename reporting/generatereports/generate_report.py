@@ -27,14 +27,27 @@ def generate_report(row):
     print("Generating report...")
     pdf = rs.PDF()
     pdf.frontpage(row['last_report_date'], row['date'])
+
     pdf.quick_overview( row['num_tests_since_last_report'], 
                         row['deviation_in_num_of_tests'], 
                         row['num_of_tests_singapore'],
                         row['num_of_tests_new_york'],
                         row['num_of_tests_amsterdam'],
                         PLOT_FOLDER_PATH)
+                        
+    pdf.general_plots(PLOT_FOLDER_PATH)
+
+
     pdf.geographical_coverage(PLOT_FOLDER_PATH)
-    pdf.all_time_overview(PLOT_FOLDER_PATH)
+
+    pdf.os_and_browser_section(PLOT_FOLDER_PATH)
+
+    pdf.burstyness_section(PLOT_FOLDER_PATH)
+
+    
+
+    pdf.stat_section(PLOT_FOLDER_PATH)
+
     pdf.Appendix()
 
     pdf.output(REPORT_PATH , 'F')
