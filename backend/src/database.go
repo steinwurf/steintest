@@ -13,12 +13,12 @@ import (
 
 
 type Packet struct{
-	ID int`json:"id" bson:"id,omitempty"`
-	SentAt int `json:"sent_at" bson:"sent_at,omitempty"`
-	Received bool `json:"received" bson:"received,omitempty"`
-	RecvAt int `json:"recv_at" bson:"recv_at,omitempty"`
-	Latency int `json:"latency" bson:"latency,omitempty"`
-	Delayed bool `json:"delayed" bson:"delayed,omitempty"`
+	ID int`json:"id" bson:"id"`
+	SentAt int `json:"sent_at" bson:"sent_at"`
+	Received bool `json:"received" bson:"received"`
+	RecvAt int `json:"recv_at" bson:"recv_at"`
+	Latency int `json:"latency" bson:"latency"`
+	Delayed bool `json:"delayed" bson:"delayed"`
 }
 
 type MetaData struct {
