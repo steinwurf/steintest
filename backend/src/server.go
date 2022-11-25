@@ -144,6 +144,7 @@ func reader(client *Client, pool *Pool){
 			client.WebrtcConn.AddICECandidate(candidate)
 		
 		case "packetData":
+			fmt.Println(string(p))
 			InsertData(p, client)
 
 		default:

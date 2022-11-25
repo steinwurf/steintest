@@ -10,8 +10,6 @@ import (
 
 )
 
-
-
 type Packet struct{
 	ID int`json:"id" bson:"id"`
 	SentAt int `json:"sent_at" bson:"sent_at"`
@@ -76,7 +74,7 @@ func InsertData(data []byte, client *Client){
 	// insert the user agent from the client object
 	DataFromClient.Payload.ClientData.UserAgent = client.UserAgent
 
-	fmt.Printf("Data from client: %v", DataFromClient)
+	fmt.Printf("Data from client: %v", DataFromClient.Payload)
 	// insert the data into the database
 
 	db := client.DBClient.Database(dataBaseName)

@@ -7,15 +7,17 @@ import (
 	"github.com/pion/webrtc/v3"
 	"time"
 	"os"
+	"net"
+	"log"
 )
 type client struct {
 	Webconn *websocket.Conn
 	Pc *webrtc.PeerConnection
-	TestData *testData
+	TestData *TestData
 }
 
 func Run(destinationParameters destinationParameters, testParameters testParameters) {
-	client := client{TestData: &testData{}}
+	client := client{TestData: &TestData{}}
 
 	client.Webconn = connectWebSocket(destinationParameters.Ip, destinationParameters.Port)
 
@@ -24,12 +26,18 @@ func Run(destinationParameters destinationParameters, testParameters testParamet
 	defer deferfunc(client)
 
 
-	client.TestData.MetaData = metaData{
+	client.TestData.MetaData = MetaData{
+		AcceptableDelay: testParameters.AcceptableDelay,
+		DestinationServer: destinationParameters.Ip,
 		PacketSize: testParameters.PacketSize, 
 		Duration: testParameters.Duration, 
-		PacketsPerSecond: testParameters.PacketsPerSecond, 
-		Date: time.Now().Format("2006-01-02 15:04:05"),
-		FilePath: testParameters.FilePath,
+		Frequency: testParameters.Frequency, 
+		Epoch: int(time.Now().Unix()*1000),
+	}
+
+	client.TestData.ClientData = ClientData{
+		IP : GetOutboundIP().String(),
+		UserAgent: "go-client",
 	}
 
 	dc := createDataChannel(client.Pc)
@@ -168,3 +176,15 @@ func setEventListeners(client client, dc *webrtc.DataChannel, testParameters tes
 
 }
 
+// Get preferred outbound ip of this machine
+func GetOutboundIP() net.IP {
+    conn, err := net.Dial("udp", "8.8.8.8:80")
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer conn.Close()
+
+    localAddr := conn.LocalAddr().(*net.UDPAddr)
+
+    return localAddr.IP
+}

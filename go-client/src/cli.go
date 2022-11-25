@@ -12,8 +12,8 @@ type destinationParameters struct {
 type testParameters struct {
 	PacketSize int `default:"1024"`
 	Duration int `default:"10"`
-	PacketsPerSecond int `default:"150"`
-	FilePath string `default:"TestData.json"`
+	Frequency int `default:"150"`
+	AcceptableDelay int `default:"100"`
 }
 
 func Cli() (destinationParameters, testParameters) {
@@ -21,11 +21,11 @@ func Cli() (destinationParameters, testParameters) {
 	Port := flag.String("Port", "8080", "the port of the server")
 	PacketSize := flag.Int("PacketSize", 1024, "the size of the packet")
 	Duration := flag.Int("Duration", 10, "the duration of the test in seconds")
-	PacketsPerSecond := flag.Int("PacketsPerSecond", 150, "the frequency of the packets per seconds")
-	FilePath := flag.String("FilePath", "logs/TestData.json", "the path to the file to be sent")
-
+	Frequency := flag.Int("Frequency", 150, "the frequency in Hz")
+	AcceptableDelay := flag.Int("AcceptableDelay", 100, "the acceptable delay in ms")
+	
 	flag.Parse()
 
-	return destinationParameters{*Ip, *Port}, testParameters{*PacketSize, *Duration, *PacketsPerSecond, *FilePath}
+	return destinationParameters{*Ip, *Port}, testParameters{*PacketSize, *Duration, *Frequency, *AcceptableDelay}
 
 }
