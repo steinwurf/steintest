@@ -22,7 +22,7 @@ func Cli() (destinationParameters, testParameters) {
 	PacketSize := flag.Int("PacketSize", 1024, "the size of the packet")
 	Duration := flag.Int("Duration", 10, "the duration of the test in seconds")
 	Frequency := flag.Int("Frequency", 150, "the frequency in Hz")
-	AcceptableDelay := flag.Int("AcceptableDelay", 100, "the acceptable delay in ms")
+	AcceptableDelay := flag.Int("AcceptableDelay", 150, "the acceptable delay in ms")
 	
 	flag.Parse()
 

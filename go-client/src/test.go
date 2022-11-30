@@ -6,6 +6,7 @@ import(
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
 	"strconv"
+	"strings"
 )
 
 type Packet struct{
@@ -55,7 +56,7 @@ func startTest(dc *webrtc.DataChannel, testParameters testParameters, client cli
 
 		packet := Packet{
 			ID: packet_id, 
-			SentAt: int(time.Now().Unix()*1000), 
+			SentAt: int(time.Now().UnixMilli()), 
 			Received: false,
 		}
 
@@ -73,13 +74,15 @@ func startTest(dc *webrtc.DataChannel, testParameters testParameters, client cli
 }
 
 func recvData(msg webrtc.DataChannelMessage, client client){
+	decodedMsg := string(msg.Data)
+	trimmed_msg := strings.Trim(decodedMsg, "\x00")
 
-	decodedMsg := string(msg.Data[0])
-	decodedMsgInt, _ := strconv.Atoi(decodedMsg)
+	decodedMsgInt, _ := strconv.Atoi(trimmed_msg)
+	fmt.Println("Received packet: ", decodedMsgInt)
 
 	for i := range client.TestData.RawData{
 		if client.TestData.RawData[i].ID == decodedMsgInt{
-			client.TestData.RawData[i].RecvAt = int(time.Now().Unix()*1000)
+			client.TestData.RawData[i].RecvAt = int(time.Now().UnixMilli())
 			client.TestData.RawData[i].Received = true
 			client.TestData.RawData[i].Latency = client.TestData.RawData[i].RecvAt - client.TestData.RawData[i].SentAt
 			if client.TestData.RawData[i].Latency > client.TestData.MetaData.AcceptableDelay{
