@@ -38,6 +38,10 @@ type iceCandidate struct{
 	Candidate webrtc.ICECandidateInit `json:"candidate"` 
 }
 
+type testStatusMsg struct {
+	Type string `json:"type"`
+	Status  string `json:"payload"`
+}
 
 // Handles the offer from the client
 func handleOffer (offerMsg offerMsg, webconn *websocket.Conn, msg_type int, pc *webrtc.PeerConnection){

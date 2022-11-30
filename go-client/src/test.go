@@ -5,7 +5,6 @@ import(
 	"github.com/pion/webrtc/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"time"
-	"os"
 	"strconv"
 )
 
@@ -67,11 +66,10 @@ func startTest(dc *webrtc.DataChannel, testParameters testParameters, client cli
 		dc.Send(InitialByteArray)
 		time.Sleep(SleepTime)
 	}
-	fmt.Println("Test finished")
-	
-	client.Webconn.WriteJSON(DataFromClient{Payload: *client.TestData, Type: "packetData"})
 
-	os.Exit(0)
+	fmt.Println("All packets sent")
+	
+	client.Webconn.WriteJSON(testStatusMsg{Type: "testStatus", Status: "finished"})
 }
 
 func recvData(msg webrtc.DataChannelMessage, client client){

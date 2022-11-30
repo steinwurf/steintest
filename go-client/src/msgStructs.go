@@ -31,3 +31,8 @@ type candidateMsg struct {
 	Type string `json:"type"`
 	Payload candidatePayLoad `json:"candidate"`
 }
+
+type testStatusMsg struct {
+	Type string `json:"type"`
+	Status  string `json:"payload"`
+}

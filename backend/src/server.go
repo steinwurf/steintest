@@ -146,6 +146,11 @@ func reader(client *Client, pool *Pool){
 		case "packetData":
 			fmt.Println(string(p))
 			InsertData(p, client)
+		
+		case "testStatus":
+			fmt.Println("test status received")
+			client.SocketConn.WriteMessage(messageType, p)
+
 
 		default:
 			fmt.Println(string(p))

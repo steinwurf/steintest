@@ -71,6 +71,11 @@ func Run(destinationParameters destinationParameters, testParameters testParamet
 
 			candidate := webrtc.ICECandidateInit{Candidate: candidateMsg.Payload.Candidate, SDPMid: candidateMsg.Payload.SdpMid, SDPMLineIndex: candidateMsg.Payload.SdpMLineIndex}
 			client.Pc.AddICECandidate(candidate)
+
+		case "testStatus":
+			client.Webconn.WriteJSON(DataFromClient{Payload: *client.TestData, Type: "packetData"})
+			os.Exit(0)
+
 		default:
 			fmt.Println(string(p))
 		}
