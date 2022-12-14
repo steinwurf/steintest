@@ -74,7 +74,7 @@ func Run(destinationParameters destinationParameters, testParameters testParamet
 
 		case "testStatus":
 			client.Webconn.WriteJSON(DataFromClient{Payload: *client.TestData, Type: "packetData"})
-			os.Exit(0)
+			os.Exit(deferfunc(client))
 
 		default:
 			fmt.Println(string(p))
@@ -82,10 +82,11 @@ func Run(destinationParameters destinationParameters, testParameters testParamet
 	}
 }
 
-func deferfunc (client client){
+func deferfunc (client client)int{
 	fmt.Println("Closing connections")
 	client.Webconn.Close()
 	client.Pc.Close()
+	return 0
 }
 
 

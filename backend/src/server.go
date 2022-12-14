@@ -8,7 +8,6 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/pion/webrtc/v3"
 	"github.com/rs/xid"
-	"sync"
 	"strings"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -25,7 +24,6 @@ type Client struct{
 
 type Server struct{
 	Pool *Pool
-	Mutex sync.Mutex
 }
 
 type Pool struct{
@@ -85,11 +83,11 @@ func reader(client *Client, pool *Pool){
 		fmt.Printf("client with id  %s has now left. %d users still connected \n", client.ID, len(pool.Clients))
 	}()
 	
-	defer func() {
+	/* defer func() {
         if r := recover(); r != nil {
             fmt.Println("Recovered. Error:\n", r)
         }
-    }()
+    }() */
 	
 	
 	config := webrtc.Configuration{
@@ -144,7 +142,7 @@ func reader(client *Client, pool *Pool){
 			client.WebrtcConn.AddICECandidate(candidate)
 		
 		case "packetData":
-			fmt.Println(string(p))
+			fmt.Println("recieved packet data")
 			InsertData(p, client)
 		
 		case "testStatus":
@@ -153,6 +151,7 @@ func reader(client *Client, pool *Pool){
 
 
 		default:
+			// THIS IS FOR DEBUGGING
 			fmt.Println(string(p))
 
 		}
@@ -183,15 +182,17 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 	log.Println("client succesfully connected to the server")
 	go reader(&client, pool)
 
-	defer func(){
-		fmt.Printf("client with id  %s has now left. %d users still connected \n", client.ID, len(pool.Clients))
-	}()
+	defer func() {
+        if r := recover(); r != nil {
+            fmt.Println("Recovered. Error:\n", r)
+        }
+    }()
 
 }
 
 
 func setupRoutes() {
-	server := Server{Pool: NewPool(), Mutex: sync.Mutex{}}
+	server := Server{Pool: NewPool()}
 	
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		wsEndpoint(server.Pool, w, r)

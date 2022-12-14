@@ -29,9 +29,6 @@ type candidateMsg struct {
 	Payload candidatePayLoad `json:"Payload"`
 }
 
-type webSocketConnection struct{
-	conn *websocket.Conn 
-}
 
 type iceCandidate struct{
 	Type string `json:"type"`
