@@ -1,25 +1,16 @@
 # What is Steintest? 
-A packet loss measuring tool, measuring packet loss over webrtc connections.
+Steintest consists of a server and a client both written in golang. Steintests allow users to perform and document packetloss tests over a webrtc connection (datachannel). 
 
 # Usage
 
-## Server
-
-
-## Client
 
 
 
 
 
 
-
-
-
-# API Reference
-The documentation now is limited but the overall logic will be added to the issue called documentation
 
 
 
 # License
-The license of this project is unkown.
+This project is under the MIT license 
