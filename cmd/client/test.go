@@ -78,7 +78,6 @@ func recvData(msg webrtc.DataChannelMessage, client client){
 	trimmed_msg := strings.Trim(decodedMsg, "\x00")
 
 	decodedMsgInt, _ := strconv.Atoi(trimmed_msg)
-	fmt.Println("Received packet: ", decodedMsgInt)
 
 	for i := range client.TestData.RawData{
 		if client.TestData.RawData[i].ID == decodedMsgInt{

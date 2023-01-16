@@ -74,7 +74,6 @@ func InsertData(data []byte, client *Client){
 	// insert the user agent from the client object
 	DataFromClient.Payload.ClientData.UserAgent = client.UserAgent
 
-	fmt.Printf("Data from client: %v", DataFromClient.Payload)
 	// insert the data into the database
 
 	db := client.DBClient.Database(dataBaseName)
@@ -85,4 +84,5 @@ func InsertData(data []byte, client *Client){
         fmt.Println(err)
         return
     }
+	fmt.Println("succesfully inserted data")
 }

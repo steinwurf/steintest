@@ -151,8 +151,8 @@ func reader(client *Client, pool *Pool){
 
 
 		default:
-			// THIS IS FOR DEBUGGING
-			fmt.Println(string(p))
+			
+			fmt.Println("the message type is not recognized")
 
 		}
 	}
