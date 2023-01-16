@@ -29,7 +29,7 @@ func Cli() ServerParams {
 
 	// check if the flag was provided
     if *jsonFile == "" {
-        fmt.Println("error: please provide a JSON file using the -json flag")
+        fmt.Println("error: please provide a JSON file using the -json flag the json file should ocntain hte meta data about the server")
         os.Exit(1)
     }
 
