@@ -2,7 +2,9 @@ package main
 
 
 func main() {
-	StartServer()
+	ServerParams := Cli()
+
+	StartServer(ServerParams)
 
 	
 }
