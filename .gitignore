@@ -15,4 +15,4 @@
 # vendor/
 *.venv
 
-cmd/server/serverparams.json
+serverparams.json
