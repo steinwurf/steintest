@@ -24,6 +24,7 @@ type Client struct{
 
 type Server struct{
 	Pool *Pool
+	Params ServerParams
 }
 
 type Pool struct{
@@ -72,24 +73,17 @@ func setEventListeners(client *Client){
 	})
 }
 
-func reader(client *Client, pool *Pool){
+func reader(client *Client, server *Server){
 
-	client.DBClient = ConnectToDB()
+	client.DBClient = ConnectToDB(server.Params.DbConnectionString)
 	fmt.Println("succesfully connected to db")
 
 	defer func(){
-		delete(pool.Clients, client)
+		delete(server.Pool.Clients, client)
 		client.SocketConn.Close()
-		fmt.Printf("client with id  %s has now left. %d users still connected \n", client.ID, len(pool.Clients))
+		fmt.Printf("client with id  %s has now left. %d users still connected \n", client.ID, len(server.Pool.Clients))
 	}()
-	
-	/* defer func() {
-        if r := recover(); r != nil {
-            fmt.Println("Recovered. Error:\n", r)
-        }
-    }() */
-	
-	
+		
 	config := webrtc.Configuration{
 		ICEServers: []webrtc.ICEServer{
 			{
@@ -119,7 +113,6 @@ func reader(client *Client, pool *Pool){
 			break	
 		}
 
-
 		//unmarshalling the message to a map
 		var message map[string]interface{}
 		json.Unmarshal(p, &message)
@@ -143,7 +136,7 @@ func reader(client *Client, pool *Pool){
 		
 		case "packetData":
 			fmt.Println("recieved packet data")
-			InsertData(p, client)
+			InsertData(p, client, &server.Params)
 		
 		case "testStatus":
 			fmt.Println("test status received")
@@ -151,15 +144,15 @@ func reader(client *Client, pool *Pool){
 
 
 		default:
-			// THIS IS FOR DEBUGGING
-			fmt.Println(string(p))
+			
+			fmt.Println("the message type is not recognized")
 
 		}
 	}
 }
 
 // The websocket endpoint
-func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
+func wsEndpoint(server Server, w http.ResponseWriter, r *http.Request){
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true}
 
 	client := Client{
@@ -168,19 +161,19 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 		UserAgent: r.UserAgent(), //Getting the user agent
 	}
 	
-	pool.Clients[&client] = true
+	server.Pool.Clients[&client] = true
 
 
 	var err error
 	client.SocketConn, err = upgrader.Upgrade(w,r, nil)
 	if err != nil{
-		delete(pool.Clients, &client)
+		delete(server.Pool.Clients, &client)
 		panic(err)
 	}
 
 	
 	log.Println("client succesfully connected to the server")
-	go reader(&client, pool)
+	go reader(&client, &server)
 
 	defer func() {
         if r := recover(); r != nil {
@@ -191,19 +184,21 @@ func wsEndpoint(pool *Pool, w http.ResponseWriter, r *http.Request){
 }
 
 
-func setupRoutes() {
-	server := Server{Pool: NewPool()}
+func setupRoutes(ServerParams ServerParams) {
+	server := Server{Pool: NewPool(), Params: ServerParams}
 	
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		wsEndpoint(server.Pool, w, r)
+		wsEndpoint(server, w, r)
 	})
 
 }
 
-func StartServer() {
+func StartServer(ServerParams ServerParams) {
 	fmt.Println("Starting server")
-	setupRoutes()
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	setupRoutes(ServerParams)
+
+	portString := ":" + ServerParams.Port
+	log.Fatal(http.ListenAndServe(portString, nil))
 }
 
 

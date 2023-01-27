@@ -77,7 +77,7 @@ func Run(destinationParameters destinationParameters, testParameters testParamet
 			os.Exit(deferfunc(client))
 
 		default:
-			fmt.Println(string(p))
+			fmt.Println("The string did not did not match any of the cases")
 		}
 	}
 }

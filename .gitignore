@@ -15,4 +15,4 @@
 # vendor/
 *.venv
 
-backend/src/ServerInfo.go
+serverparams.json

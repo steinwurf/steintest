@@ -46,7 +46,7 @@ type DataFromClient struct {
 
 
 
-func ConnectToDB() *mongo.Client {
+func ConnectToDB(dbconnectionstring string) *mongo.Client {
 	client, err := mongo.NewClient(options.Client().ApplyURI(dbconnectionstring))
 	if err != nil {
 		panic(err)
@@ -58,14 +58,13 @@ func ConnectToDB() *mongo.Client {
 	return client
 }
 
-func InsertData(data []byte, client *Client){
-
+func InsertData(data []byte, client *Client, serverParams *ServerParams){
 
 	DataFromClient := DataFromClient{}
 	json.Unmarshal(data, &DataFromClient)
 
 	// parse the ServerName to the object
-	DataFromClient.Payload.MetaData.DestinationServer = ServerName
+	DataFromClient.Payload.MetaData.DestinationServer = serverParams.ServerName
 
 	// insert the Ip form the client object
 
@@ -74,15 +73,15 @@ func InsertData(data []byte, client *Client){
 	// insert the user agent from the client object
 	DataFromClient.Payload.ClientData.UserAgent = client.UserAgent
 
-	fmt.Printf("Data from client: %v", DataFromClient.Payload)
 	// insert the data into the database
 
-	db := client.DBClient.Database(dataBaseName)
-	coll := db.Collection(collectionName)
+	db := client.DBClient.Database(serverParams.DatabaseName)
+	coll := db.Collection(serverParams.CollectionName)
 
 	_, err := coll.InsertOne(context.TODO(), DataFromClient.Payload)
     if err != nil {
         fmt.Println(err)
         return
     }
+	fmt.Println("succesfully inserted data")
 }
