@@ -15,25 +15,26 @@ Clone repository<br />
 
 
 # Server setup 
-For the server to insert the data in the mongodb a file with following format must be provided. <br />
-It must be saved as /cmd/server/ServerInfo.go.
+For the server to function it needs a json file with the following format
 ```
-package main 
+{
+    "port": "",
+    "dbconnectionstring" : "",
+    "collectionname": "",
+    "databasename" : "",
+    "servername" : ""
+}
 
-const(
-	dbconnectionstring = "" 
-	collectionName = ""
-	dataBaseName = ""
-	ServerName = ""
-)
 ```
 The ServerName is simply what this server is identified as in the mongodb. <br />
 
+This file must be passed to the server when running it.
+
 Now the server is ready to be started: 
 ```
-./cmd/server/server
+./cmd/server/server -json <PathToServerParams>
 ```
-If "server running" is printed, the server is running and listening on port 8080
+If "server running" is printed, the server is running and listening on the specified port.
 
 
 # client setup
@@ -43,9 +44,11 @@ The client can be run by executing the executable:
 ./cmd/client/client
 ```
 
-It is possible to specify the paramters for the test by..
-
-
+It is possible to specify the paramters for the test in the commandline, write 
+```
+./cmd/client/client -h
+```
+To see the parameters.
 
 # License
 This project is under the MIT license 
