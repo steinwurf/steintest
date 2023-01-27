@@ -4,7 +4,7 @@
 # What is Steintest? 
 Steintest consists of a server and a client both written in golang. Steintests allow users to perform and document packetloss tests over a webrtc connection (datachannel).
 
-# requirements
+# Requirements
 This application is devopled with go version go1.18.1 linux/amd64 <br />
 Access to a mongodb (connection string)
 
@@ -14,7 +14,7 @@ Clone repository<br />
 ```git clone https://github.com/steinwurf/steintest.git``` <br />
 
 
-# Server setup 
+# Server Setup 
 For the server to function it needs a json file with the following format
 ```
 {
@@ -37,7 +37,7 @@ Now the server is ready to be started:
 If "server running" is printed, the server is running and listening on the specified port.
 
 
-# client setup
+# Client Setup
 
 The client can be run by executing the executable: 
 ```
