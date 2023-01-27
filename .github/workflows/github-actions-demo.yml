@@ -1,7 +1,23 @@
-name: GitHub Actions Demo
-on: [push]
+name: Build go binaries
+on:
+  push:
+    branches:
+      - master
+      - dev
+
 jobs:
-  uses: JesseTG/rm@v1.0.3
-  runs-on: ubuntu-latest
-  with:
-    path: ./test.txt
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.18.1'
+
+      - name: Install dependencies
+        run: |
+          go version
+          go get mod.go 
+      - name: Run build
+        run: go build .
