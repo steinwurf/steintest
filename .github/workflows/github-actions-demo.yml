@@ -21,3 +21,4 @@ jobs:
           go get mod.go 
       - name: Run build
         run: go build .
+        
