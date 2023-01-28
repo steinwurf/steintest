@@ -31,8 +31,10 @@ jobs:
           path: ./bin
 
       - name: Test
-        run: cd ./bin 
-        run: ls -a
+        run: |
+          cd ./bin
+          ls -a
+        
 
 
       - name: Upload binaries
