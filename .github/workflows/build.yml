@@ -21,3 +21,12 @@ jobs:
       - name: build server
         run: go build -o ./bin/server ./cmd/server
 
+      - name: build client
+        run: go build -o ./bin/client ./cmd/client
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: binaries
+          path: ./bin
+
