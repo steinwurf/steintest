@@ -1,7 +1,0 @@
-name: GitHub Actions Demo
-on: [push]
-jobs:
-  uses: JesseTG/rm@v1.0.3
-  runs-on: ubuntu-latest
-  with:
-    path: ./test.txt
