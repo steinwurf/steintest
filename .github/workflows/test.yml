@@ -8,9 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps : 
-      - name : Checkout
-      run : echo "Hello World1"
+    steps: 
+      - name: Checkout
+      run: echo "Hello World1"
 
-      - name : Setup Go
-      run : echo "Hello World2"
+      - name: Setup Go
+      run: echo "Hello World2"
