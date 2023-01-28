@@ -16,9 +16,7 @@ jobs:
           go-version: '1.18.1'
 
       - name: Install dependencies
-        run: |
-          go version
-          go get mod.go 
+        run: go get mod.go 
+
       - name: Run build
         run: go build .
-        
