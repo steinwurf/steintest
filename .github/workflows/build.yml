@@ -29,7 +29,12 @@ jobs:
         with:
           name: binaries
           path: ./bin
-      
+
+      - name: Test
+        run: cd ./bin 
+        run: ls -a
+
+
       - name: Upload binaries
         uses: actions/upload-artifact@v3
         with:
