@@ -18,6 +18,6 @@ jobs:
       - name: Install dependencies
         run: go mod download 
 
-      - name: Run build
-        run: go build .
+      - name: build server
+        run: go build -o ./bin/server ./cmd/server
 
