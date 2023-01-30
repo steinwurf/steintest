@@ -1,16 +1,10 @@
-name: Build go binaries
+name: Build go binaries and create release
 on:
-  push:
-    branches:
-      - master
-      - dev
-
-      #on:
-      #  pull_request:
-      #    types:
-      #    - closed
-      #  branches:
-      #  - master
+  pull_request:
+    types:
+    - closed
+  branches:
+  - master
 
 jobs:
   build:
@@ -47,10 +41,7 @@ jobs:
         with:
           tag_name: ${{ steps.bump_version.outputs.new_tag }}
           release_name: Release ${{ steps.bump_version.outputs.new_tag }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
+          body: No body
           draft: false
           prerelease: false
 
