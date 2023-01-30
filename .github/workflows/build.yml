@@ -2,9 +2,9 @@ name: Build go binaries and create release
 on:
   pull_request:
     types:
-    - closed
-  branches:
-  - master
+      - closed
+    branches:
+      - master
 
 jobs:
   build:
