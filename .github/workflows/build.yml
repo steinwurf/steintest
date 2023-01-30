@@ -31,7 +31,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: echo release tag
-        run: echo ${{ steps.generate_release_tag.outputs.release_tag }}
+        run: echo $steps.generate_release_tag.outputs.release_tag
 
       - name: Create Release
         id: create_release
