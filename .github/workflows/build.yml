@@ -25,6 +25,8 @@ jobs:
         run: go build -o ./bin/client ./cmd/client
 
       - name: "Tag and release"
+        run: |
+          echo "done!"
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
