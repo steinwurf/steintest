@@ -38,3 +38,6 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
+          files: |
+            ./bin/server
+            ./bin/client
