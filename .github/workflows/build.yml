@@ -24,21 +24,9 @@ jobs:
       - name: build client
         run: go build -o ./bin/client ./cmd/client
 
-      - name: Upload binaries
-        uses: actions/upload-artifact@v3
+      - name: Release the binaries
+        uses: softprops/action-gh-release@v1
         with:
-          name: binaries
-          path: ./bin
-
-      - name: Test
-        run: |
-          cd ./bin
-          ls -a
-        
-
-
-      - name: Upload binaries
-        uses: actions/upload-artifact@v3
-        with:
-          name: binaries
-          path: ./bin
+          files: ./bin/*
+          draft: true
+          prerelease: true
