@@ -24,6 +24,9 @@ jobs:
       - name: build client
         run: go build -o ./bin/client ./cmd/client
 
+      - name: see what we got
+        run: ls -a ./bin
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
