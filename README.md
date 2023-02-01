@@ -30,7 +30,7 @@ This file must be passed to the server when running it.
 
 Now the server is ready to be started: 
 ```
-./cmd/server/server -json <PathToServerParams>
+<PathToServer> -json <PathToServerParams>
 ```
 If "server running" is printed, the server is running and listening on the specified port.
 
@@ -39,12 +39,12 @@ If "server running" is printed, the server is running and listening on the speci
 
 The client can be run by executing the executable: 
 ```
-./cmd/client/client
+<PathToClient>
 ```
 
 It is possible to specify the paramters for the test in the commandline, write 
 ```
-./cmd/client/client -h
+<PathToClient> -h
 ```
 To see the parameters.
 
