@@ -22,14 +22,14 @@ type ServerParams struct {
 func Cli() ServerParams {
 	
 	// define the flag
-    jsonFile := flag.String("json", "", "a JSON file")
+    jsonFile := flag.String("serverParams", "", "a JSON file containing the server parameters, find an example in the repo")
 
     // parse the flags
     flag.Parse()
 
 	// check if the flag was provided
     if *jsonFile == "" {
-        fmt.Println("error: please provide a JSON file using the -json flag the json file should ocntain hte meta data about the server")
+        fmt.Println("error: please provide a JSON file using the -json flag the json file should contain the meta data about the server")
         os.Exit(1)
     }
 
