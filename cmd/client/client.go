@@ -105,7 +105,16 @@ func connectWebSocket(ip string, port string) *websocket.Conn {
 }
 
 func createDataChannel(pc *webrtc.PeerConnection) *webrtc.DataChannel{
-	dc, err := pc.CreateDataChannel("data", nil)
+	falseBool := false
+	var maxRetransmits uint16 = 0
+
+	options := webrtc.DataChannelInit{
+		Ordered: &falseBool,
+		MaxRetransmits: &maxRetransmits,
+
+	}
+
+	dc, err := pc.CreateDataChannel("data", &options)
 	if err != nil {
 		panic(err)
 	}
