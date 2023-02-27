@@ -1,6 +1,6 @@
-[![GitHub release](https://img.shields.io/github/release/steinwurf/steintest.svg)](https://github.com/steinwurf/steintest/releases/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub All Releases](https://img.shields.io/github/downloads/steinwurf/steintest/total.svg)](https://github.com/steinwurf/steintest/releases/)
+[![GitHub release](https://img.shields.io/github/release/steinwurf/steintest.svg?color=blue)](https://github.com/steinwurf/steintest/releases/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?color=blue)](https://opensource.org/licenses/MIT)
+[![GitHub All Releases](https://img.shields.io/github/downloads/steinwurf/steintest/total.svg?color=blue)](https://github.com/steinwurf/steintest/releases/)
 ![Go version](https://img.shields.io/badge/go-%3E%3D%201.18.1-blue.svg)
 
 # Steintest
