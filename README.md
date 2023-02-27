@@ -1,3 +1,8 @@
+[![GitHub release](https://img.shields.io/github/release/steinwurf/steintest.svg)](https://github.com/steinwurf/steintest/releases/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub All Releases](https://img.shields.io/github/downloads/steinwurf/steintest/total.svg)](https://github.com/steinwurf/steintest/releases/)
+[![Libraries.io](https://img.shields.io/librariesio/github/steinwurf/steintest.svg)](https://libraries.io/github/steinwurf/steintest)
+![Go version](https://img.shields.io/badge/go-%3E%3D%201.18.1-blue.svg)
 
 # What is Steintest? 
 Steintest consists of a server and a client both written in golang. Steintests allow users to perform and document packetloss tests over a webrtc connection (datachannel).
