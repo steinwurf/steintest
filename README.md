@@ -1,58 +1,62 @@
 [![GitHub release](https://img.shields.io/github/release/steinwurf/steintest.svg)](https://github.com/steinwurf/steintest/releases/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub All Releases](https://img.shields.io/github/downloads/steinwurf/steintest/total.svg)](https://github.com/steinwurf/steintest/releases/)
-[![Libraries.io](https://img.shields.io/librariesio/github/steinwurf/steintest.svg)](https://libraries.io/github/steinwurf/steintest)
 ![Go version](https://img.shields.io/badge/go-%3E%3D%201.18.1-blue.svg)
 
-# What is Steintest? 
-Steintest consists of a server and a client both written in golang. Steintests allow users to perform and document packetloss tests over a webrtc connection (datachannel).
+# Steintest
 
-# Requirements
-This application is devopled with go version go1.18.1 linux/amd64 <br />
-Access to a mongodb (connection string)
+Steintest is a server and client tool written in Go that enables users to perform and document packetloss tests over a WebRTC connection (datachannel).
 
+## Requirements
 
-# Usage
-Clone repository<br />
-```git clone https://github.com/steinwurf/steintest.git``` <br />
+- Go version go1.18.1 linux/amd64
+- Access to a MongoDB (connection string)
 
+## Usage
 
-# Server Setup 
-For the server to function it needs a json file with the following format
-```
+1. Clone the repository: 
+
+2. Start the server: 
+
+To start the server, you will need to create a JSON file with the following format:
+
+ ```
 {
-    "port": "",
-    "dbconnectionstring" : "",
-    "collectionname": "",
-    "databasename" : "",
-    "servername" : ""
+"port": "",
+"dbconnectionstring" : "",
+"collectionname": "",
+"databasename" : "",
+"servername" : ""
 }
+ ```
 
-```
-The ServerName is simply what this server is identified as in the mongodb. <br />
+Replace the values with your own information, and save the file. The `servername` is what this server will be identified as in MongoDB.
 
-This file must be passed to the server when running it.
-
-Now the server is ready to be started: 
-```
+Start the server by running:
+ ```
 <PathToServer> -json <PathToServerParams>
-```
+ ```
+
 If "server running" is printed, the server is running and listening on the specified port.
 
+3. Run the client:
+ ```
+ <PathToClient>
+ ```
 
-# Client Setup
-
-The client can be run by executing the executable: 
-```
-<PathToClient>
-```
-
-It is possible to specify the paramters for the test in the commandline, write 
-```
+You can specify parameters for the test by passing command-line arguments. Use the following command to see the available parameters:
+ ```
 <PathToClient> -h
-```
-To see the parameters.
+ ```
 
-# License
-This project is under the MIT license 
+## Contributing
+We welcome contributions to Steintest. If you would like to contribute, please fork the repository and create a pull request.
 
+## Credits
+Steintest uses the following open-source libraries:
+- pion/webrtc
+- mongodb/mongo-go-driver
+
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
