@@ -54,8 +54,8 @@ We welcome contributions to Steintest. If you would like to contribute, please f
 
 ## Credits
 Steintest uses the following open-source libraries:
-- pion/webrtc
-- mongodb/mongo-go-driver
+- [pion/webrtc](https://github.com/pion/webrtc)
+- [mongodb/mongo-go-driver](https://github.com/mongodb/mongo-go-driver)
 
 
 ## License
