@@ -56,7 +56,7 @@ jobs:
         run: |
           echo "mongodb://localhost:27017" > ./demo/connection_string.txt
 
-      -name: inspect 
+      - name: inspect 
         run: ls -la ./demo
       
       
