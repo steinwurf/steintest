@@ -1,0 +1,58 @@
+name: Build go binaries and test them
+on:
+  push:
+    branches:
+      - master
+      -dev
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.18.1'
+
+
+      - name: Install dependencies
+        run: go mod download 
+
+      - name: build server
+        run: go build -o ./bin/server ./cmd/server
+
+      - name: build client
+        run: go build -o ./bin/client ./cmd/client
+
+
+
+      - name: copy server to demo
+        run: cp ./bin/server ./demo/server
+
+      - name: copy client to demo
+        run: cp ./bin/client ./demo/client
+
+      - name: Install Docker
+        run: sudo apt-get update && sudo apt-get install -y docker.io
+
+      - name: Pull MongoDB Docker image
+        run: sudo docker pull mongo
+
+      - name: Start MongoDB container
+        run: |
+          sudo docker run -d -p 27017:27017 --name mongodb mongo
+          sudo docker ps -a
+      
+      - name: Wait for MongoDB container to start
+        run: |
+          while ! sudo docker exec mongodb mongo --eval "printjson(db.serverStatus())" &> /dev/null; do
+              echo "Waiting for MongoDB to start..."
+              sleep 1
+          done
+          echo "MongoDB is up and running!"
+
+      
