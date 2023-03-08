@@ -44,7 +44,7 @@ jobs:
 
       - name: create database and collection
         run: |
-          docker exec -it mongo mongo
+          docker exec -it mongodb mongo
           use test
           db.createCollection("test")
 
