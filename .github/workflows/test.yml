@@ -44,7 +44,7 @@ jobs:
 
       - name: create database and collection
         run: |
-          docker exec -T mongo mongo
+          mongo --host localhost --port 27017
           use test
           db.createCollection("test")
 
