@@ -12,12 +12,13 @@ connection_string_path = demo_path / "connection_string.txt"
 def load_connection_string():
     with open(connection_string_path, 'r') as f:
         return f.read()
-    
 
 def get_loss_from_last_test():
-    client = MongoClient(load_connection_string())
+
+
+    client = MongoClient(host="localhost", port=27017)
     db = client['test']
-    col = db["default"]
+    col = db["test"]
 
     # retrieve the last inserted document
     last_doc = col.find().sort([('_id', -1)]).limit(1)[0]
