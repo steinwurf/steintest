@@ -39,12 +39,12 @@ jobs:
 
       - name: Start MongoDB container
         run: |
-          sudo docker run -d -p 27017:27017 --name mongodb mongo
+          sudo docker run -d -p 27017:27017 --name mongo mongo
           sudo docker ps -a
 
       - name: create database and collection
         run: |
-          docker exec -it mongodb mongo
+          docker exec -it mongo mongo
           use test
           db.createCollection("test")
 
