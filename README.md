@@ -14,7 +14,7 @@ Steintest is a server and client tool written in Go that enables users to perfor
 
 ## Usage
 
-1. Clone the repository: 
+1. Download the server and client from the latest release.
 
 2. Start the server: 
 
