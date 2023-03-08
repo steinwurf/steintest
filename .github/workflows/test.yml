@@ -36,8 +36,8 @@ jobs:
       - name: copy client to demo
         run: cp ./bin/client ./demo/client
 
-      - name: Install Docker
-        run: sudo apt-get update && sudo apt-get install -y docker.io
+      - name: check docker version
+        run: docker --version
 
       - name: Pull MongoDB Docker image
         run: sudo docker pull mongo
