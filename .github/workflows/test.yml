@@ -66,9 +66,8 @@ jobs:
 
       - name: testr
         run: |
-          ls -a
-          sudo sh ./demo/sh_demo/create_ns.sh
-          sudo sh ./demo/sh_demo/cleanup.sh
+          sudo sh demo/sh_demo/create_ns.sh
+          sudo sh demo/sh_demo/cleanup.sh
 
 
 
