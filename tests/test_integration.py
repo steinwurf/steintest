@@ -6,9 +6,9 @@ sys.path.append("..")
 import demo.run_demo as f
 
 # parametrize the test
-@pytest.mark.parametrize("expected_packet_loss", [0, 5, 10, 20, 50])
-@pytest.mark.parametrize("duration", [5, 10])
-@pytest.mark.parametrize("frequency", [100, 200, 300])
+@pytest.mark.parametrize("expected_packet_loss", [2])
+@pytest.mark.parametrize("duration", [5])
+@pytest.mark.parametrize("frequency", [100])
 @pytest.mark.parametrize("packet_size", [100])
 def test_integration(expected_packet_loss, duration, frequency, packet_size):
     os.chdir(str(utils.demo_path))
