@@ -64,6 +64,13 @@ jobs:
         run: |
           echo "mongodb://localhost:27017" > ./demo/connection_string.txt
 
+      - name: testr
+        run: |
+          sudo sh ./demo/sh_demo/create_ns.sh
+          sudo sh ./demo/sh_demo/cleanup.sh
+
+
+
       - name: run the tests
         run: |
           cd tests
