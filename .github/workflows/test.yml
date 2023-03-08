@@ -28,16 +28,11 @@ jobs:
       - name: build client
         run: go build -o ./bin/client ./cmd/client
 
-
-
       - name: copy server to demo
         run: cp ./bin/server ./demo/server
 
       - name: copy client to demo
         run: cp ./bin/client ./demo/client
-
-      - name: check docker version
-        run: sudo systemctl status docker
 
       - name: Pull MongoDB Docker image
         run: sudo docker pull mongo
@@ -46,8 +41,24 @@ jobs:
         run: |
           sudo docker run -d -p 27017:27017 --name mongodb mongo
           sudo docker ps -a
+
+      - name: create database and collection
+        run: |
+          docker exec -it mongo mongo
+          use test
+          db.createCollection("test")
+
+      - name: create server params as json
+        run: |
+            echo '{"port": "8080", "dbconnectionstring": "mongodb://localhost:27017", "collectionname": "test", "databasename": "test", "servername": "test"}' > ./demo/server_params.json
+
+      - name: create the connection string
+        run: |
+          echo "mongodb://localhost:27017" > ./demo/connection_string.txt
+
+      -name: inspect 
+        run: ls -la ./demo
       
-      - name: check which container is running
-        run: sudo docker ps -a
+      
 
       
