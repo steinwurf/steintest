@@ -1,2 +1,4 @@
 pytest
 pymongo
+pandas
+dummynet
