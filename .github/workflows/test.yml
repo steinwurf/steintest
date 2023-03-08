@@ -42,11 +42,15 @@ jobs:
           sudo docker run -d -p 27017:27017 --name mongo mongo
           sudo docker ps -a
 
-      - name: create database and collection
+      - name: Install MongoDB client
+        run: sudo apt-get install -y mongodb-clients
+
+      - name: Create database and collection
         run: |
-          mongo --host localhost --port 27017
-          use test
-          db.createCollection("test")
+          echo 'use test' | mongo --host localhost --port 27017
+          echo 'db.createCollection("test")' | mongo --host localhost --port 27017 test
+
+
 
       - name: create server params as json
         run: |
