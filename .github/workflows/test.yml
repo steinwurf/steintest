@@ -76,6 +76,7 @@ jobs:
       - name: run the client
         run: sudo ip netns exec ns2 ./demo/client -Ip 10.0.0.2
 
+
       - name: run the tests
         run: |
           cd tests
