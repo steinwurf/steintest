@@ -78,9 +78,6 @@ jobs:
           cd demo
           ./client -Ip 127.0.0.1 
 
-
-
-
       - name: run the tests
         run: |
           cd tests
