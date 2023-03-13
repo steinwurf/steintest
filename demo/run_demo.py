@@ -20,7 +20,7 @@ def run_full_demo(packetloss, duration, frequency, packet_size):
 
         # Run the server and client in the namespaces
         server = run_server(ns1)
-        time.sleep(10)
+        time.sleep(2)
 
         client = run_client(ns2, duration, frequency, packet_size)
 
@@ -110,12 +110,12 @@ def add_packetloss(ns, interface, packetloss=0, delay=0):
 def run_client(ns, duration, frequency, packet_size):
     # run the client in the second namespace
     def _client_stdout(data):
-        #print("client {}".format(data))
+        print("client {}".format(data))
         pass
         
     client = ns.run_async(cmd=f"./client -Ip 10.0.0.2 -Duration {duration} -Frequency {frequency} -PacketSize {packet_size}", daemon=False)
 
-    #client.stdout_callback = _client_stdout
+    client.stdout_callback = _client_stdout
 
     return client
 

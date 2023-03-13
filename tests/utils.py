@@ -15,14 +15,12 @@ def load_connection_string():
 
 def get_loss_from_last_test():
 
-
     client = MongoClient(host="localhost", port=27017)
     db = client['test']
     col = db["test"]
 
     # retrieve the last inserted document
     last_doc = col.find().sort([('_id', -1)]).limit(1)[0]
-    print(last_doc)
 
     raw_data = last_doc["raw_data"]
     epoch = last_doc["meta_data"]["epoch"]
@@ -55,3 +53,7 @@ def calculate_packetloss_bounds(expected_packet_loss, duration, frequency):
     upper_bound = mean + 2.58 * std
 
     return  lower_bound * 100, upper_bound * 100
+
+
+if __name__ == "__main__":
+    print(load_connection_string())

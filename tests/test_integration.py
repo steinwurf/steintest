@@ -22,8 +22,7 @@ def test_integration(expected_packet_loss, duration, frequency, packet_size):
     # calculate the bounds
     lower_bound, upper_bound = utils.calculate_packetloss_bounds(expected_packet_loss, duration, frequency)
 
-    assert True
-    #assert expected_packet_loss - lower_bound <= packet_loss <= expected_packet_loss + upper_bound
+    assert expected_packet_loss - lower_bound <= packet_loss <= expected_packet_loss + upper_bound
 
 
 
