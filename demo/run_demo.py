@@ -6,6 +6,7 @@ import subprocess
 from pymongo import MongoClient
 import pandas as pd
 from datetime import datetime
+import sys
 
 def run_full_demo(packetloss, duration, frequency, packet_size):
     # runs the full demo with the given parameters
@@ -29,6 +30,7 @@ def run_full_demo(packetloss, duration, frequency, packet_size):
             
     except Exception as e:
         print(e)
+        sys.exit(1)
         
     finally:        
         cleanup(net, shell)
