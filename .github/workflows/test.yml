@@ -68,9 +68,10 @@ jobs:
         run: |
           echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
 
-      - name: insert a document
+      - name: start the server
         run: |
-          echo 'db.test.insert({"test": "test"})' | mongo --host localhost --port 27017 test
+          cd demo
+          ./server &
 
 
 
