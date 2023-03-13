@@ -29,8 +29,7 @@ def run_full_demo(packetloss, duration, frequency, packet_size):
             pass
             
     except Exception as e:
-        print(e)
-        sys.exit(1)
+        print("error: ", e)
         
     finally:        
         cleanup(net, shell)
