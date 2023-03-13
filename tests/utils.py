@@ -22,6 +22,7 @@ def get_loss_from_last_test():
 
     # retrieve the last inserted document
     last_doc = col.find().sort([('_id', -1)]).limit(1)[0]
+    print(last_doc)
 
     raw_data = last_doc["raw_data"]
     epoch = last_doc["meta_data"]["epoch"]
