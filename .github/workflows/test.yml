@@ -71,7 +71,7 @@ jobs:
       - name: start the server
         run: |
           cd demo
-          ./server -JSON server_params.json &
+          ./server -serverParams server_params.json &
 
 
 
