@@ -64,10 +64,9 @@ jobs:
         run: |
           echo "mongodb://localhost:27017" > ./demo/connection_string.txt
 
-      - name: testr
+      - name: change the resolve.conf file
         run: |
-          sudo sh ./demo/sh_demo/create_ns.sh
-          sudo sh ./demo/sh_demo/cleanup.sh
+          sudo ip netns exec ns1 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 
 
 
