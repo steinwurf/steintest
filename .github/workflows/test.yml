@@ -71,7 +71,7 @@ jobs:
         run: sudo sh ./demo/sh_demo/create_ns.sh
 
       - name: run the server
-        run: sudo ip netns exec ns1 ./demo/server -serverParams server_params.json &
+        run: sudo ip netns exec ns1 ./demo/server -serverParams ./demo/server_params.json &
 
       - name: run the client
         run: sudo ip netns exec ns2 ./demo/client
