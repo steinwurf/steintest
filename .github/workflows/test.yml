@@ -68,7 +68,7 @@ jobs:
           echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
 
       - name: setup the namespaces
-        run: sudo sh ./demo/sh_demo/create_namespaces.sh
+        run: sudo sh ./demo/sh_demo/create_ns.sh
 
       - name: run the server
         run: sudo ip netns exec ns1 ./demo/server -serverParams server_params.json &
