@@ -57,6 +57,7 @@ jobs:
           echo 'use test' | mongo --host localhost --port 27017
           echo 'db.createCollection("test")' | mongo --host localhost --port 27017 test
 
+
       - name: create server params as json
         run: |
             echo '{"port": "8080", "dbconnectionstring": "mongodb://localhost:27017", "collectionname": "test", "databasename": "test", "servername": "test"}' > ./demo/server_params.json
