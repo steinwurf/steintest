@@ -68,13 +68,6 @@ jobs:
         run: |
           echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
 
-      - name: start the server
-        run: |
-          cd demo
-          ./server -serverParams server_params.json &
-
-
-
       - name: run the tests
         run: |
           cd tests

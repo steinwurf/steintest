@@ -20,7 +20,7 @@ def run_full_demo(packetloss, duration, frequency, packet_size):
 
         # Run the server and client in the namespaces
         server = run_server(ns1)
-        time.sleep(1)
+        time.sleep(10)
 
         client = run_client(ns2, duration, frequency, packet_size)
 
