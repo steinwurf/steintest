@@ -1,29 +1,24 @@
-from pathlib import Path
-from pymongo import MongoClient
-from datetime import datetime
-import pandas as pd
-from math import sqrt
+import subprocess
+import os
 import time
-import logging
+import pymongo
+import pandas as pd
+from datetime import datetime
+from math import sqrt
 
+def connect_to_mongo():
+    
+    # connect to mongo
+    client = pymongo.MongoClient("mongodb://localhost:27017/")
+    return client
 
-demo_path = Path(__file__).resolve().parents[1] / "demo"
-connection_string_path = demo_path / "connection_string.txt"
-def load_connection_string():
-    with open(connection_string_path, 'r') as f:
-        return f.read()
+def stop_containers():
+    subprocess.run(["docker", "compose", "down"])  # Stop and remove containers
 
-def get_loss_from_last_test():
+def get_loss_from_doc(doc):
 
-    client = MongoClient(host="localhost", port=27017)
-    db = client['test']
-    col = db["test"]
-
-    # retrieve the last inserted document
-    last_doc = col.find().sort([('_id', -1)]).limit(1)[0]
-
-    raw_data = last_doc["raw_data"]
-    epoch = last_doc["meta_data"]["epoch"]
+    raw_data = doc["raw_data"]
+    epoch = doc["meta_data"]["epoch"]
     time = datetime.fromtimestamp(epoch/1000)
 
     # create df from the last inserted document
@@ -53,7 +48,3 @@ def calculate_packetloss_bounds(expected_packet_loss, duration, frequency):
     upper_bound = mean + 2.58 * std
 
     return  lower_bound * 100, upper_bound * 100
-
-
-if __name__ == "__main__":
-    print(load_connection_string())

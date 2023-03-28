@@ -1,60 +1,79 @@
-import pytest 
-import os
-import sys
-import tests.utils as utils
-sys.path.append("..")
-import demo.run_demo as f
-import subprocess
+import pytest
+import pymongo
+import socket
 import time
+import subprocess
+import os
+import utils
+import docker
 
-""" # parametrize the test
-@pytest.mark.parametrize("expected_packet_loss", [2])
-@pytest.mark.parametrize("duration", [5])
-@pytest.mark.parametrize("frequency", [100])
+
+
+
+
+
+@pytest.mark.parametrize("duration", [1,1,1,1,1])
 @pytest.mark.parametrize("packet_size", [100])
-def test_integration(expected_packet_loss, duration, frequency, packet_size):
-    os.chdir(str(utils.demo_path))
+@pytest.mark.parametrize("packet_loss", [10])
+@pytest.mark.parametrize("packet_delay", [0])
+@pytest.mark.parametrize("frequency", [30, 100])
+def test_integration(duration, packet_size, packet_loss, packet_delay, frequency):
+    try:
+        env_vars = {
+            "DURATION": str(duration),
+            "PACKETSIZE": str(packet_size),
+            "LOSS_RATE": str(packet_loss),
+            "PACKET_DELAY": str(packet_delay),
+            "FREQUENCY": str(frequency),
+        }
 
-    f.run_full_demo(expected_packet_loss, duration, frequency, packet_size)
-
-    # get the test result
-
-    packet_loss = utils.get_loss_from_last_test()
-
-    # calculate the bounds
-    lower_bound, upper_bound = utils.calculate_packetloss_bounds(expected_packet_loss, duration, frequency)
-
-    assert expected_packet_loss - lower_bound <= packet_loss <= expected_packet_loss + upper_bound """
-
-@pytest.mark.parametrize("expected_packet_loss", [2])
-@pytest.mark.parametrize("duration", [5])
-@pytest.mark.parametrize("frequency", [100])
-@pytest.mark.parametrize("packet_size", [100])
-def test1_integration(expected_packet_loss, duration, frequency, packet_size):
-    os.chdir(str(utils.demo_path))
-
-    # run the server 
-    server = subprocess.Popen(["sudo ip netns exec ns1 ./server", "-serverParams server_params.json"], shell=True)
-
-    # run the client
-    client = subprocess.Popen(["sudo ip netns exec ns2 ./client", "-clientParams"], shell=True)
-
-    # wait 1 minute
-    time.sleep(60)
-
-    # kill the server
-    server.kill()
-
-    # kill the client
-    client.kill()
-
-    # get the test result
-
-    packet_loss = utils.get_loss_from_last_test()
-
-    # calculate the bounds
-    lower_bound, upper_bound = utils.calculate_packetloss_bounds(expected_packet_loss, duration, frequency)
-
-    assert expected_packet_loss - lower_bound <= packet_loss <= expected_packet_loss + upper_bound
+        docker_compose_cmd = ["docker", "compose", "up"]
+        for key, value in env_vars.items():
+            os.environ[key] = value
+            
+        # run docker-compose
+        subprocess.Popen(docker_compose_cmd, stdout=None)
 
 
+        # Connect to the Docker daemon
+        client = docker.from_env()
+
+        # Get the list of containers defined in the Docker Compose file
+        while True:
+            print("Monitoring containers")
+            containers = client.containers.list()
+            container_names = [container.name for container in containers]
+
+            print(container_names)
+            
+            if ("tests-client-1" not in container_names) and len(container_names) == 2:
+                print("test is finished")
+                break             
+            
+            time.sleep(5)
+
+
+        db_client = utils.connect_to_mongo()
+        db = db_client["test"]
+        collection = db["test"]
+
+        num_docs = collection.count_documents({})
+        recorded_packet_loss = utils.get_loss_from_doc(collection.find_one({}))
+        lower_bound, upper_bound = utils.calculate_packetloss_bounds(
+            packet_loss, duration, frequency
+        )
+        print("num_docs: ", num_docs)
+        print("recorded_packet_loss: ", recorded_packet_loss)
+
+        assert num_docs == 1
+        assert lower_bound <= recorded_packet_loss <= upper_bound
+
+    finally:
+        # stop the containers
+        utils.stop_containers()
+
+
+
+
+if __name__ == "__main__":
+    test_integration(1, 100, 10, 0, 100)
