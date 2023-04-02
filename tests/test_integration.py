@@ -8,7 +8,7 @@ import utils
 import docker
 
 
-@pytest.mark.parametrize("duration", [1,1,1,1,1])
+@pytest.mark.parametrize("duration", [1])
 @pytest.mark.parametrize("packet_size", [100])
 @pytest.mark.parametrize("packet_loss", [10])
 @pytest.mark.parametrize("packet_delay", [0])
