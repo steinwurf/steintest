@@ -41,7 +41,6 @@ def test_integration(duration, packet_size, packet_loss, packet_delay, frequency
             container_names = [container.name for container in containers]
 
             print(container_names)
-            
             if 0 < len(container_names) < 3:
                 print("test is finished")
                 break             
