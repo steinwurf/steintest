@@ -13,7 +13,7 @@ def connect_to_mongo():
     return client
 
 def stop_containers():
-    subprocess.run(["docker", "compose", "down"])  # Stop and remove containers
+    subprocess.run(["docker-compose", "down"])  # Stop and remove containers
 
 def get_loss_from_doc(doc):
 

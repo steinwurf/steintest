@@ -8,10 +8,6 @@ import utils
 import docker
 
 
-
-
-
-
 @pytest.mark.parametrize("duration", [1,1,1,1,1])
 @pytest.mark.parametrize("packet_size", [100])
 @pytest.mark.parametrize("packet_loss", [10])
@@ -27,7 +23,7 @@ def test_integration(duration, packet_size, packet_loss, packet_delay, frequency
             "FREQUENCY": str(frequency),
         }
 
-        docker_compose_cmd = ["docker", "compose", "up"]
+        docker_compose_cmd = ["docker-compose", "up"]
         for key, value in env_vars.items():
             os.environ[key] = value
             
