@@ -42,7 +42,7 @@ def test_integration(duration, packet_size, packet_loss, packet_delay, frequency
 
             print(container_names)
             
-            if ("tests-client-1" not in container_names) and len(container_names) == 2:
+            if 0 < len(container_names) < 3:
                 print("test is finished")
                 break             
             
