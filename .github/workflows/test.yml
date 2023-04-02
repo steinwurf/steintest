@@ -23,7 +23,7 @@ jobs:
 
 
       - name: Install dependencies
-        run: go mod download 
+        run: cd cmd/client && go mod download 
 
       - name: build server
         run: go build -o ./bin/server ./cmd/server
