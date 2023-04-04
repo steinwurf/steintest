@@ -46,7 +46,7 @@ def test_integration(duration, packet_size, packet_loss, packet_delay, frequency
                 print("test is finished")
                 break             
             
-            time.sleep(5)
+            time.sleep(10)
 
         time.sleep(5)
         db_client = utils.connect_to_mongo()
