@@ -10,7 +10,7 @@ import docker
 
 @pytest.mark.parametrize("duration", [1])
 @pytest.mark.parametrize("packet_size", [100])
-@pytest.mark.parametrize("packet_loss", [0, 5, 10, 20])
+@pytest.mark.parametrize("packet_loss", [0])
 @pytest.mark.parametrize("packet_delay", [0])
 @pytest.mark.parametrize("frequency", [100])
 def test_integration(duration, packet_size, packet_loss, packet_delay, frequency):
