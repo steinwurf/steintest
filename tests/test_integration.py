@@ -58,8 +58,6 @@ def test_integration(duration, packet_size, packet_loss, packet_delay, frequency
         lower_bound, upper_bound = utils.calculate_packetloss_bounds(
             packet_loss, duration, frequency
         )
-        print("num_docs: ", num_docs)
-        print("recorded_packet_loss: ", recorded_packet_loss)
 
         assert num_docs == 1
         assert lower_bound <= recorded_packet_loss <= upper_bound
