@@ -41,14 +41,14 @@ def test_integration(duration, packet_size, packet_loss, packet_delay, frequency
             container_names = [container.name for container in containers]
 
             print(container_names)
-            
-            if 0 < len(container_names) < 3:
+
+            if 1 < len(container_names) < 3:
                 print("test is finished")
                 break             
             
             time.sleep(5)
 
-
+        time.sleep(5)
         db_client = utils.connect_to_mongo()
         db = db_client["test"]
         collection = db["test"]
