@@ -9,6 +9,7 @@ import (
 	"net"
 	"os"
 	"time"
+	"math"
 )
 
 type client struct {
@@ -73,6 +74,7 @@ func Run(destinationParameters destinationParameters, testParameters testParamet
 
 		case "testStatus":
 			client.Webconn.WriteJSON(DataFromClient{Payload: *client.TestData, Type: "packetData"})
+			PrintResults(client)
 			os.Exit(deferfunc(client))
 
 		default:
@@ -199,4 +201,38 @@ func GetOutboundIP() net.IP {
 	localAddr := conn.LocalAddr().(*net.UDPAddr)
 
 	return localAddr.IP
+}
+
+func PrintResults(client client) {
+	fmt.Println("Test finished")
+	PacketsSent := len(client.TestData.RawData)
+	PacketsLost := 0
+	PacketsLostPercentage := 0.0
+	AverageDelay := 0.0
+	MaxDelay := 0.0
+	MinDelay := math.Inf(1)
+
+	for _, packet := range client.TestData.RawData {
+		if packet.Received == false {
+			PacketsLost++
+		} else {
+			AverageDelay += float64(packet.Latency)
+			if float64(packet.Latency) > MaxDelay {
+				MaxDelay = float64(packet.Latency)
+			}
+			if float64(packet.Latency) < MinDelay {
+				MinDelay = float64(packet.Latency)
+			}
+		}
+	}
+
+	PacketsLostPercentage = float64(PacketsLost) / float64(PacketsSent) * 100
+	AverageDelay = AverageDelay / float64(PacketsSent)
+
+	fmt.Printf("Packets sent:          %d\n", PacketsSent)
+	fmt.Printf("Packets lost:          %d\n", PacketsLost)
+	fmt.Printf("Packets lost %%:        %.2f%%\n", PacketsLostPercentage)
+	fmt.Printf("Average delay:         %.2f ms\n", AverageDelay)
+	fmt.Printf("Max delay:             %.2f ms\n", MaxDelay)
+	fmt.Printf("Min delay:             %.2f ms\n", MinDelay)
 }

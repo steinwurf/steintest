@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/pion/webrtc/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"strconv"
@@ -44,7 +43,6 @@ type DataFromClient struct {
 }
 
 func startTest(dc *webrtc.DataChannel, testParameters testParameters, client client) {
-	fmt.Println("Starting test")
 	NumberOfPackets := testParameters.Duration * testParameters.Frequency
 	SleepTime := time.Duration(1000/testParameters.Frequency) * time.Millisecond
 	InitialByteArray := make([]byte, testParameters.PacketSize)
@@ -66,9 +64,8 @@ func startTest(dc *webrtc.DataChannel, testParameters testParameters, client cli
 		time.Sleep(SleepTime)
 	}
 
-	fmt.Println("All packets sent")
-
 	client.Webconn.WriteJSON(testStatusMsg{Type: "testStatus", Status: "finished"})
+
 }
 
 func recvData(msg webrtc.DataChannelMessage, client client) {
