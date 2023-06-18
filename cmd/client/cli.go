@@ -5,14 +5,14 @@ import (
 )
 
 type destinationParameters struct {
-	Ip string `default:"localhost"`
+	Ip   string `default:"localhost"`
 	Port string `default:"8080"`
 }
 
 type testParameters struct {
-	PacketSize int `default:"1024"`
-	Duration int `default:"10"`
-	Frequency int `default:"150"`
+	PacketSize      int `default:"1024"`
+	Duration        int `default:"10"`
+	Frequency       int `default:"150"`
 	AcceptableDelay int `default:"100"`
 }
 
@@ -23,7 +23,7 @@ func Cli() (destinationParameters, testParameters) {
 	Duration := flag.Int("Duration", 10, "the duration of the test in seconds")
 	Frequency := flag.Int("Frequency", 150, "the frequency in Hz")
 	AcceptableDelay := flag.Int("AcceptableDelay", 150, "the acceptable delay in ms")
-	
+
 	flag.Parse()
 
 	return destinationParameters{*Ip, *Port}, testParameters{*PacketSize, *Duration, *Frequency, *AcceptableDelay}

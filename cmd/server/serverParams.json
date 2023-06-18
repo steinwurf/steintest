@@ -1,0 +1,7 @@
+{
+    "port": "8080",
+    "dbconnectionstring" : "mongodb://mongodb:27017/",
+    "collectionname": "test",
+    "databasename" : "test",
+    "servername" : "test"
+    }

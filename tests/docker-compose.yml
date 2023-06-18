@@ -1,0 +1,35 @@
+version: "3"
+services:
+  mongodb:
+    image: mongo:4.0.4
+    ports:
+      - "27017:27017"
+    networks:
+      - my_network
+
+
+
+  server:
+    networks:
+    - my_network
+    build: ../cmd/server
+    expose:
+      - "8080"
+    dns:
+    - "8.8.8.8"
+    depends_on:
+    - mongodb
+
+
+  client:
+    networks:
+    - my_network
+    depends_on:
+    - server
+    build: ../cmd/client
+    command: ["sh", "-c", "sleep 5 && tc qdisc add dev eth0 root netem loss ${LOSS_RATE}% && ./client -Ip server -Duration ${DURATION} -PacketSize ${PACKETSIZE} -Frequency ${FREQUENCY}"]
+    privileged: true
+    dns: 8.8.8.8
+
+networks:
+  my_network:

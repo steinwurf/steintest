@@ -5,14 +5,16 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/pion/webrtc/v3"
-	"time"
-	"os"
-	"net"
 	"log"
+	"net"
+	"os"
+	"time"
+	"math"
 )
+
 type client struct {
-	Webconn *websocket.Conn
-	Pc *webrtc.PeerConnection
+	Webconn  *websocket.Conn
+	Pc       *webrtc.PeerConnection
 	TestData *TestData
 }
 
@@ -25,18 +27,17 @@ func Run(destinationParameters destinationParameters, testParameters testParamet
 
 	defer deferfunc(client)
 
-
 	client.TestData.MetaData = MetaData{
-		AcceptableDelay: testParameters.AcceptableDelay,
+		AcceptableDelay:   testParameters.AcceptableDelay,
 		DestinationServer: destinationParameters.Ip,
-		PacketSize: testParameters.PacketSize, 
-		Duration: testParameters.Duration, 
-		Frequency: testParameters.Frequency, 
-		Epoch: int(time.Now().Unix()*1000),
+		PacketSize:        testParameters.PacketSize,
+		Duration:          testParameters.Duration,
+		Frequency:         testParameters.Frequency,
+		Epoch:             int(time.Now().Unix() * 1000),
 	}
 
 	client.TestData.ClientData = ClientData{
-		IP : GetOutboundIP().String(),
+		IP:        GetOutboundIP().String(),
 		UserAgent: "go-client",
 	}
 
@@ -52,21 +53,20 @@ func Run(destinationParameters destinationParameters, testParameters testParamet
 			panic(err)
 		}
 		var message map[string]interface{}
-			json.Unmarshal(p, &message)
+		json.Unmarshal(p, &message)
 
-
-		switch message["type"]{
+		switch message["type"] {
 
 		case "answer":
 			fmt.Println("Received answer")
 
 			var answer webrtc.SessionDescription
 			json.Unmarshal(p, &answer)
-			
+
 			client.Pc.SetRemoteDescription(answer)
 
 		case "candidate":
-			var candidateMsg candidateMsg	
+			var candidateMsg candidateMsg
 			json.Unmarshal(p, &candidateMsg)
 
 			candidate := webrtc.ICECandidateInit{Candidate: candidateMsg.Payload.Candidate, SDPMid: candidateMsg.Payload.SdpMid, SDPMLineIndex: candidateMsg.Payload.SdpMLineIndex}
@@ -74,6 +74,7 @@ func Run(destinationParameters destinationParameters, testParameters testParamet
 
 		case "testStatus":
 			client.Webconn.WriteJSON(DataFromClient{Payload: *client.TestData, Type: "packetData"})
+			PrintResults(client)
 			os.Exit(deferfunc(client))
 
 		default:
@@ -82,18 +83,17 @@ func Run(destinationParameters destinationParameters, testParameters testParamet
 	}
 }
 
-func deferfunc (client client)int{
+func deferfunc(client client) int {
 	fmt.Println("Closing connections")
 	client.Webconn.Close()
 	client.Pc.Close()
 	return 0
 }
 
-
 func connectWebSocket(ip string, port string) *websocket.Conn {
 	fmt.Println("Connecting to websocket")
 
-	conn, _, err := websocket.DefaultDialer.Dial("ws://" + ip + ":" + port, nil)
+	conn, _, err := websocket.DefaultDialer.Dial("ws://"+ip+":"+port, nil)
 	if err != nil {
 		fmt.Println("Failed to connect to websocket")
 		fmt.Println("Make sure that the backend is running and listening on the correct addres eg.", ip, ":", port)
@@ -104,8 +104,16 @@ func connectWebSocket(ip string, port string) *websocket.Conn {
 	return conn
 }
 
-func createDataChannel(pc *webrtc.PeerConnection) *webrtc.DataChannel{
-	dc, err := pc.CreateDataChannel("data", nil)
+func createDataChannel(pc *webrtc.PeerConnection) *webrtc.DataChannel {
+	falseBool := false
+	var maxRetransmits uint16 = 0
+
+	options := webrtc.DataChannelInit{
+		Ordered:        &falseBool,
+		MaxRetransmits: &maxRetransmits,
+	}
+
+	dc, err := pc.CreateDataChannel("data", &options)
 	if err != nil {
 		panic(err)
 	}
@@ -121,8 +129,8 @@ func createwebRTCConnection() *webrtc.PeerConnection {
 				URLs: []string{"stun:stun1.l.google.com:19302"},
 			},
 			{
-				URLs: []string{"turn:142.93.235.90:3478"},
-				Username: "test",
+				URLs:       []string{"turn:142.93.235.90:3478"},
+				Username:   "test",
 				Credential: "test123",
 			},
 		},
@@ -156,10 +164,10 @@ func sendOffer(pc *webrtc.PeerConnection, webconn *websocket.Conn) {
 }
 
 // Handles the candidate from the client
-func handleICECandidates(candidate *webrtc.ICECandidate, webconn *websocket.Conn, pc *webrtc.PeerConnection){
-	if candidate != nil{
+func handleICECandidates(candidate *webrtc.ICECandidate, webconn *websocket.Conn, pc *webrtc.PeerConnection) {
+	if candidate != nil {
 
-		object, err := json.Marshal(iceCandidate{Type:"candidate", Candidate:  candidate.ToJSON()})
+		object, err := json.Marshal(iceCandidate{Type: "candidate", Candidate: candidate.ToJSON()})
 		if err != nil {
 			panic(err)
 		}
@@ -167,8 +175,8 @@ func handleICECandidates(candidate *webrtc.ICECandidate, webconn *websocket.Conn
 	}
 }
 
-func setEventListeners(client client, dc *webrtc.DataChannel, testParameters testParameters){
-	
+func setEventListeners(client client, dc *webrtc.DataChannel, testParameters testParameters) {
+
 	client.Pc.OnICECandidate(func(candidate *webrtc.ICECandidate) {
 		handleICECandidates(candidate, client.Webconn, client.Pc)
 	})
@@ -184,13 +192,47 @@ func setEventListeners(client client, dc *webrtc.DataChannel, testParameters tes
 
 // Get preferred outbound ip of this machine
 func GetOutboundIP() net.IP {
-    conn, err := net.Dial("udp", "8.8.8.8:80")
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer conn.Close()
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
 
-    localAddr := conn.LocalAddr().(*net.UDPAddr)
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
 
-    return localAddr.IP
+	return localAddr.IP
+}
+
+func PrintResults(client client) {
+	fmt.Println("Test finished")
+	PacketsSent := len(client.TestData.RawData)
+	PacketsLost := 0
+	PacketsLostPercentage := 0.0
+	AverageDelay := 0.0
+	MaxDelay := 0.0
+	MinDelay := math.Inf(1)
+
+	for _, packet := range client.TestData.RawData {
+		if packet.Received == false {
+			PacketsLost++
+		} else {
+			AverageDelay += float64(packet.Latency)
+			if float64(packet.Latency) > MaxDelay {
+				MaxDelay = float64(packet.Latency)
+			}
+			if float64(packet.Latency) < MinDelay {
+				MinDelay = float64(packet.Latency)
+			}
+		}
+	}
+
+	PacketsLostPercentage = float64(PacketsLost) / float64(PacketsSent) * 100
+	AverageDelay = AverageDelay / float64(PacketsSent)
+
+	fmt.Printf("Packets sent:          %d\n", PacketsSent)
+	fmt.Printf("Packets lost:          %d\n", PacketsLost)
+	fmt.Printf("Packets lost %%:        %.2f%%\n", PacketsLostPercentage)
+	fmt.Printf("Average delay:         %.2f ms\n", AverageDelay)
+	fmt.Printf("Max delay:             %.2f ms\n", MaxDelay)
+	fmt.Printf("Min delay:             %.2f ms\n", MinDelay)
 }
