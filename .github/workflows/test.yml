@@ -8,7 +8,7 @@ name: Build go binaries and test them
   push:
     branches:
     - master
-  pull_request: null
+  pull_request:
 jobs:
   build:
     runs-on: ubuntu-latest
