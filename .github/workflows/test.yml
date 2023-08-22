@@ -1,32 +1,26 @@
 name: Build go binaries and test them
-on:
+'on':
+  workflow_dispatch:
+    inputs:
+      extra_resolve_options:
+        description: Extra Resolve Options
+        required: false
   push:
     branches:
-      - master
-      - dev
+    - master
   pull_request:
-    branches:
-      - master
-
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        architecture: [x86]
+        architecture:
+        - x86
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: '1.18.1'
-
-      - name: run the tests
-        run: |
-          cd tests
-          pip install -r requirements.txt 
-          pytest
-    
-      
-
-
+    - uses: actions/checkout@v2
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.18.1
+    - name: run the tests
+      run: "cd tests\npip install -r requirements.txt \npytest\n"
